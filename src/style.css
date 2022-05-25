@@ -1,0 +1,312 @@
+/* DARK MODE SCHEME */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #3a3131;
+        --hover: #4d4141;
+        --font: white;
+        --yellow: #ffc814;
+        --orange: #ff7214;
+        --blue: #0982fc;
+        --gray: #6e6e6e;
+        --red: #7a2a2a;
+        --green : #349234;
+        --key: #8a8a8a;
+    }
+}
+
+/* LIGHT MODE SCHEME */
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg: #ffffff;
+        --font: #000000;
+        --container: #e4e4e4;
+        --blue: #0982fc;
+        --thread: #d3d3d3;
+    }
+}
+
+body {
+    background-color: var(--bg);
+    font-family: 'Roboto Mono', monospace;
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+input {
+    font-family: 'Roboto Mono', monospace;
+    background-color: var(--bg);
+    color: var(--yellow);
+    border-width:0px;
+    border:none;
+    outline:none;
+    font-size: 24px;
+    width: 100%;
+    padding: 0;
+}
+
+.listItem {
+  padding: 12px;  
+  line-break: auto;
+  border-radius: 12px;
+}
+
+
+.close {
+    /* float: right; */
+}
+
+.container { 
+    padding-left: 13px;  
+    padding-right: 13px;
+}
+
+.hoverable:hover > input, .hoverable:hover{
+    background-color: var(--hover);
+}
+
+.result {
+    margin: 0%;
+    font-size: 24px;
+    color: var(--font);
+}
+
+a:link {
+    color: rgb(255, 255, 255);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(188, 56, 250);
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+
+.conf {
+    font-family: 'Roboto Mono', monospace;
+    background-color: var(--bg);
+    color: var(--yellow);
+    border-width:0px;
+    border:none;
+    outline:none;
+    border-radius: 7px;
+    font-size: 16px;
+    padding: 0;
+    margin-bottom: 12px;
+    background-color: #4d4141;
+    max-width: 10%;
+    padding: 2px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--gray);
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--gray);
+}
+  
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--gray);
+}
+
+#navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+#navbar {
+    overflow: hidden;
+    background-color: var(--hover);
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+code {
+    color: var(--yellow);
+    /* background-color: #2b2525;
+    padding: 2px;
+    border-radius: 5px; */
+}
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+  
+/* Modal Content/Box */
+.modal-content {
+    background-color: var(--bg);
+    color: var(--font);
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.close:hover,
+.close:focus {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#snackbar {
+    visibility: hidden; 
+    left: 50%;
+    min-width: 200px;
+    transform: translateX(-50%); 
+    background-color: var(--hover); 
+    color: #fff; 
+    text-align: center; 
+    border-radius: 12px; 
+    padding: 16px; 
+    position: fixed; 
+    z-index: 1; 
+    bottom: 30px; 
+}
+  
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+.keyboardRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.keyboardRowSmall {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.keyboardRowSmall > .key {
+    float: left;  
+    margin: 0 5px 5px 0;  
+    width: 80px;
+    height: 35px;  
+    font-size: 24px;
+    line-height: 20px;  
+    text-align: center;
+    color: var(--font);
+    background: var(--hover);  
+    border: none;
+    border-radius: 5px;
+}
+
+.keyboard {
+    width: 100%; 
+    max-height: 100%;
+    color: white;
+    text-align: center;
+}
+
+  
+.key {
+    float: left;  
+    margin: 0 5px 5px 0;  
+    width: 80px; 
+    height: 60px;  
+    font-size: 24px;
+    line-height: 60px;  
+    text-align: center;
+    color: var(--font);
+    background: var(--key);  
+    border: none;
+    border-radius: 5px;
+}
+
+#divide, #multiply, #minus, #plus {
+    background-color: var(--yellow);
+    color: var(--bg)
+}
+
+#equals {
+    width: 165px;
+}
+
+
+body, html, #container {
+    height: 100%;
+}
+
+
+.top {
+    overflow-y: auto;
+    height:40%;
+    width:100%;
+    margin:auto;
+}
+
+.bottom {
+    height:60%;
+    width:100%;
+    margin:auto;
+    color:#FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
