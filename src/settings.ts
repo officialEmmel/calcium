@@ -13,7 +13,8 @@ const defaultConfig = {
         randomSeed: null,
     }
 }
-function getConfig() {
+
+export function getConfig() {
     let s = getKey("config")
     if(s == null) {
         setKey("config", JSON.stringify(defaultConfig))
@@ -37,4 +38,3 @@ function getKey(key:string) {
     return localStorage.getItem(key)
 }
 
-const CONFIG = getConfig()

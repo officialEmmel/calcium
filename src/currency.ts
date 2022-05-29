@@ -1,4 +1,4 @@
-import math from "mathjs"
+import {createUnit} from "mathjs"
 const URl = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json"
 
 export async function getCurrencies() {
@@ -26,6 +26,6 @@ export async function getCurrencies() {
         }
     }
     console.log(units)
-    math.createUnit(units,{override: true})
+    createUnit(units,{override: true})
 }
 

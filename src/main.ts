@@ -1,30 +1,13 @@
-import math from "mathjs";
-import {calculate} from "./calculator"
+import {calculate, createParser, setConfig} from "./calculator"
 import {getCurrencies}  from "./currency"
-import {showModal, showToast, clearUi, previewOutput, previewError, toggleK, setOutput, keyboardOverwritten} from "./ui"
-
+import {showModal, showToast, clearUi, previewOutput, previewError, toggleK, setOutput, keyboardOverwritten, modals} from "./ui"
+import {getConfig} from "./settings"
 
 let draft = ""
-math.config({
-    epsilon: CONFIG.math.epsilon,
-    matrix: CONFIG.math.matrix,
-    number: CONFIG.math.number,
-    precision: CONFIG.math.precision,
-    predictable: CONFIG.math.predictable,
-    randomSeed: CONFIG.math.randomSeed
-})
 
-export let parser:any = localStorage.getItem("parser")
-if(parser == null) {
-    parser = math.parser()
-    localStorage.setItem("parser", JSON.stringify(parser.getAll()))
-} else {
-    let vars = JSON.parse(parser)
-    parser = math.parser()
-    for (let key in vars) {
-        parser.set(key, vars[key])
-    }
-}
+
+//loading parser from local storage or create new one
+export let parser = createParser()	
 
 let history:any = []
 // @ts-ignore
@@ -41,17 +24,16 @@ function setEventListener() {
 }
 
 // remove event listeners
-function removeEventListener() { 
+function removeEventListener(input:any) { 
     input.removeEventListener("keyup", setPrev)
     input.removeEventListener("keydown", keypress);
-    //input.removeEventListener("copy", copy)
 }
 
 function keypress(event:any) {
     if (event.key === "Enter") {
       event.preventDefault();
       setOut()
-      removeEventListener();
+      removeEventListener(event.target);
       setEventListener()
     } else if(event.key === "ArrowUp") {
         event.preventDefault();
@@ -91,7 +73,7 @@ function setOut() {
     var e = parse(input.value, false)
 
     if(e == "clear history") {
-        removeEventListener();
+        removeEventListener(input);
         setEventListener()
         return
     }
@@ -159,7 +141,7 @@ function parse(exp:any, prev:any) {
             let regex:any = new RegExp("^! *("+ commands.join("|") +")$").exec(exp)
             switch(regex[1]) {
                 case "help":
-                    if(!prev){showModal("help");}
+                    if(!prev){showModal(modals.help);}
                     if(prev){return "press enter for help"}
                     return "help"
                 case "clear":
@@ -167,15 +149,15 @@ function parse(exp:any, prev:any) {
                     if(prev){return "press enter to clear history"}
                     return "clear history"
                 case "settings":
-                    if(!prev){showModal("settings");}   
+                    if(!prev){showModal(modals.settings);}   
                     if(prev){return "press enter for settings"}
                     return "settings"
                 case "about":
-                    if(!prev){showModal("about");}   
+                    if(!prev){showModal(modals.about);}   
                     if(prev){return "press enter for about page"}
                     return "about"
                 case "h":
-                    if(!prev){showModal("help");}
+                    if(!prev){showModal(modals.help);}
                     if(prev){return "press enter for help"}
                     return "help"
                 case "c":
@@ -183,11 +165,11 @@ function parse(exp:any, prev:any) {
                     if(prev){return "press enter to clear history"}
                     return "clear history"
                 case "s":
-                    if(!prev){showModal("settings");}   
+                    if(!prev){showModal(modals.settings);}   
                     if(prev){return "press enter for settings"}
                     return "settings"
                 case "a":
-                    if(!prev){showModal("about");}   
+                    if(!prev){showModal(modals.about);}   
                     if(prev){return "press enter for about page"}
                     return "about"
                 case "k":
@@ -197,7 +179,7 @@ function parse(exp:any, prev:any) {
             }
         } else {return "unknown command. you can see all commands: <b>!help</b>"}
     }
-    return calculate(exp, prev)
+    return calculate(parser, exp, prev)
 }
 
 
@@ -206,4 +188,5 @@ function parse(exp:any, prev:any) {
 setEventListener();
 // download currencies and create new units
 getCurrencies();
+
 

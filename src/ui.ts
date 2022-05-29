@@ -140,18 +140,18 @@ export const modals = {
                 <ul>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
                         <label for="ep">Epsilon:</label>
-                        <input class="conf" type="text" id="ep" value="${CONFIG.math.epsilon}">
+                        <input class="conf" type="text" id="ep" value="-">
                     </li>
                     <li style="margin-bottom: 15px;">
                         <label for="matrix">Matrix output for functions: </label>
-                        <select name="matrix" id="matrix" value="${CONFIG.math.matrix}">
+                        <select name="matrix" id="matrix" value="-">
                             <option value="Matrix">Matrix</option>
                             <option value="Array">Array</option>
                         </select>
                     </li>
                     <li style="margin-bottom: 15px;">
                         <label for="number">Default numeric output: </label>
-                        <select name="number" id="number" value="${CONFIG.math.number}">
+                        <select name="number" id="number" value="-">
                             <option value="number">Number</option>
                             <option value="BigNumber">BigNumber</option>
                             <option value="Fraction">Fraction</option>
@@ -159,7 +159,7 @@ export const modals = {
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 15px;">
                         <label for="prec">Precision:</label>
-                        <input class="conf" type="number" id="prec" value="${CONFIG.math.precision}">
+                        <input class="conf" type="number" id="prec" value="-">
                     </li>
                 </ul>
                 <h4>What does each option do? Take a look <a href="https://mathjs.org/docs/core/configuration.html">here.</a></h4>
