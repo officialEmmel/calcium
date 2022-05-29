@@ -3,6 +3,8 @@ import {getCurrencies}  from "./currency"
 import {showModal, showToast, clearUi, previewOutput, previewError, toggleK, setOutput, keyboardOverwritten, modals} from "./ui"
 import {getConfig} from "./settings"
 
+//test
+
 class App {
     config: any
     parser: any
