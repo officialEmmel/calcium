@@ -87,8 +87,8 @@ class App {
         this.history = []
         this.currentIndex = 0
         this.draft = ""
-        this.parser.clear()
-        localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
+        this.calculator.parser.clear()
+        localStorage.setItem("parser", JSON.stringify(this.calculator.parser.getAll()))
         localStorage.setItem("history", this.history)
     }
 
