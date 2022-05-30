@@ -89,9 +89,9 @@ class App {
         console.log(this.history)
     
         this.history.push(input.value)
-        localStorage.setItem("history", JSON.stringify({history: history}))
+        localStorage.setItem("history", JSON.stringify({history: this.history}))
     
-        this.currentIndex = history.length
+        this.currentIndex = this.history.length
     
         localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
     
@@ -129,8 +129,8 @@ class App {
 
     keypress(event:any) {
         if (event.key === "Enter") {
-          event.preventDefault();
-          this.setOut()
+          //event.preventDefault();
+          this.setOut();
           this.removeEventListeners(event.target);
           this.setEventListeners()
         } else if(event.key === "ArrowUp") {
