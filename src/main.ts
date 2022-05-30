@@ -116,7 +116,7 @@ class App {
     
         this.currentIndex = this.history.length
     
-        localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
+        localStorage.setItem("parser", JSON.stringify(this.calculator.parser.getAll()))
     
     }
     
