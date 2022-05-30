@@ -1,6 +1,6 @@
 import {calculate, createParser, setConfig} from "./calculator"
 import {getCurrencies}  from "./currency"
-import {showModal, showToast, clearUi, previewOutput, previewError, toggleK, setOutput, keyboardOverwritten, modals} from "./ui"
+import {UI, toggleK, keyboardOverwritten, modals} from "./ui"
 import {getConfig} from "./settings"
 
 
@@ -10,10 +10,14 @@ class App {
     history: any
     currentIndex: any
     draft: string
+    ui: UI
     constructor() {
         
         //get config from local storage
         this.config = getConfig()
+
+        // declare ui
+        this.ui = new UI()
 
         //load history and set curr index
         this.history = this.getHistory()
@@ -82,8 +86,8 @@ class App {
         }
     
         if(e == undefined) {return}
-        else if(e.toString().includes("function")) {setOutput(input.value);}
-        else {setOutput(e)}
+        else if(e.toString().includes("function")) {this.ui.setOutput(input.value);}
+        else {this.ui.setOutput(e)}
     
         console.log(this.history)
     
@@ -98,7 +102,7 @@ class App {
     
     setPrev() {
         var input:any = document.querySelector("#latest >#input")
-        if(input.value.length == 0) { previewOutput(""); }
+        if(input.value.length == 0) { this.ui.previewOutput(""); }
     
         if(this.history[this.currentIndex] != input.value) {this.draft = (input.value==undefined) ? "" : input.value}
     
@@ -107,14 +111,14 @@ class App {
             if(err.message.includes("Unexpected end of expression")){
                 e = "";
             } else {
-                previewError(err.message);return
+                this.ui.previewError(err.message);return
             }
             
         }
     
-        if(e == undefined) {previewOutput(""); return}
-        if(e.toString().includes("function")) {previewOutput(input.value); return}
-        previewOutput(e)
+        if(e == undefined) {this.ui.previewOutput(""); return}
+        if(e.toString().includes("function")) {this.ui.previewOutput(input.value); return}
+        this.ui.previewOutput(e)
     }
 
     clearHistory() {
@@ -159,35 +163,35 @@ class App {
                 let regex:any = new RegExp("^! *("+ commands.join("|") +")$").exec(exp)
                 switch(regex[1]) {
                     case "help":
-                        if(!prev){showModal(modals.help);}
+                        if(!prev){this.ui.showModal(modals.help);}
                         if(prev){return "press enter for help"}
                         return "help"
                     case "clear":
-                        if(!prev){this.clearHistory();clearUi()}
+                        if(!prev){this.clearHistory();this.ui.clearUi()}
                         if(prev){return "press enter to clear history"}
                         return "clear history"
                     case "settings":
-                        if(!prev){showModal(modals.settings);}   
+                        if(!prev){this.ui.showModal(modals.settings);}   
                         if(prev){return "press enter for settings"}
                         return "settings"
                     case "about":
-                        if(!prev){showModal(modals.about);}   
+                        if(!prev){this.ui.showModal(modals.about);}   
                         if(prev){return "press enter for about page"}
                         return "about"
                     case "h":
-                        if(!prev){showModal(modals.help);}
+                        if(!prev){this.ui.showModal(modals.help);}
                         if(prev){return "press enter for help"}
                         return "help"
                     case "c":
-                        if(!prev){this.clearHistory();clearUi()}
+                        if(!prev){this.clearHistory();this.ui.clearUi()}
                         if(prev){return "press enter to clear history"}
                         return "clear history"
                     case "s":
-                        if(!prev){showModal(modals.settings);}   
+                        if(!prev){this.ui.showModal(modals.settings);}   
                         if(prev){return "press enter for settings"}
                         return "settings"
                     case "a":
-                        if(!prev){showModal(modals.about);}   
+                        if(!prev){this.ui.showModal(modals.about);}   
                         if(prev){return "press enter for about page"}
                         return "about"
                     case "k":

@@ -6,80 +6,138 @@ let elementPrototype = `
     <p id="result" class="result"></p>
 `
 
-// document.getElementById("list").style.maxHeight = window.innerHeight - document.getElementById("test").innerHeight - 10 + "px"
-
-export function previewOutput(output:any) {
-    var preview:any = document.querySelector("#latest > #result")
-    preview.style.color = "var(--gray)"
-    preview.innerHTML = output;
-
-    if(current < 8){return}
-    preview.scrollIntoView()
-}
-
-export function previewError(output:any) {
-    var preview:any = document.querySelector("#latest > #result")
-    preview.style.color = "var(--red)"
-    preview.innerHTML = output;
-}
-
-export function setOutput(output:any) {
-    var input:any = document.querySelector("#latest > #input")
-    var out:any = document.querySelector("#latest > #result")
-    var listItem:any = document.querySelector("#latest")
-    var list:any = document.querySelector("#list")
-
-    var proto:any = document.createElement("li")
-    proto.setAttribute("id", "latest")
-    proto.setAttribute("class", "listItem")
-    proto.innerHTML = elementPrototype;
-
-    input.readOnly = true;
-
-
-    out.style.color = "var(--font)"
-    out.innerHTML = output;
-
-    listItem.setAttribute("id", "id"+current)
-    listItem.classList.add("hoverable")
-    listItem.addEventListener("click", async (e:any) => {
-        let l:any = null
-        if(e.target.id == "input") {
-            l = e.target.parentNode.querySelector("#result")
-        } else if(new RegExp("^id[0-9]+$").test(e.target.id)) {
-            l = e.target.querySelector("#result")
-        } else {
-            l = e.target
-        }
-        await navigator.clipboard.writeText(l.innerHTML)
-        showToast("Copied to clipboard", "green")
-    })
-
-    list.appendChild(proto)
-
-    // @ts-ignore
-    document.querySelector("#latest > #input").focus()
-
-    showedSolve = false
-    current++
-}
-
-export function clearUi() {
-    var listItems:any = document.getElementsByClassName("listItem")
-    while(listItems.length > 0) {
-        listItems[0].remove()
+export class UI {
+    constructor() {
+        document.addEventListener("solve",() => {
+            if(!showedSolve) {
+                showedSolve = true
+                this.showToast("Solve is not fully supported.","orange",3000)
+            }
+        })
+        
     }
 
-    var list:any = document.getElementById("list")
-    var proto:any = document.createElement("li")
-    proto.setAttribute("id", "latest")
-    proto.setAttribute("class", "listItem")
-    proto.innerHTML = elementPrototype;
-    list.appendChild(proto)
-    // @ts-ignore
-    document.querySelector("#latest > #input").focus()
-    showToast("History cleared", "green")
+    previewOutput(output:any) {
+        var preview:any = document.querySelector("#latest > #result")
+        preview.style.color = "var(--gray)"
+        preview.innerHTML = output;
+    
+        if(current < 8){return}
+        preview.scrollIntoView()
+    }
+
+    previewError(output:any) {
+        var preview:any = document.querySelector("#latest > #result")
+        preview.style.color = "var(--red)"
+        preview.innerHTML = output;
+    }
+
+    setOutput(output:any) {
+        var input:any = document.querySelector("#latest > #input")
+        var out:any = document.querySelector("#latest > #result")
+        var listItem:any = document.querySelector("#latest")
+        var list:any = document.querySelector("#list")
+    
+        var proto:any = document.createElement("li")
+        proto.setAttribute("id", "latest")
+        proto.setAttribute("class", "listItem")
+        proto.innerHTML = elementPrototype;
+    
+        input.readOnly = true;
+    
+    
+        out.style.color = "var(--font)"
+        out.innerHTML = output;
+    
+        listItem.setAttribute("id", "id"+current)
+        listItem.classList.add("hoverable")
+        listItem.addEventListener("click", async (e:any) => {
+            let l:any = null
+            if(e.target.id == "input") {
+                l = e.target.parentNode.querySelector("#result")
+            } else if(new RegExp("^id[0-9]+$").test(e.target.id)) {
+                l = e.target.querySelector("#result")
+            } else {
+                l = e.target
+            }
+            await navigator.clipboard.writeText(l.innerHTML)
+            this.showToast("Copied to clipboard", "green")
+        })
+    
+        list.appendChild(proto)
+    
+        // @ts-ignore
+        document.querySelector("#latest > #input").focus()
+    
+        showedSolve = false
+        current++
+    }
+
+    clearUi() {
+        var listItems:any = document.getElementsByClassName("listItem")
+        while(listItems.length > 0) {
+            listItems[0].remove()
+        }
+    
+        var list:any = document.getElementById("list")
+        var proto:any = document.createElement("li")
+        proto.setAttribute("id", "latest")
+        proto.setAttribute("class", "listItem")
+        proto.innerHTML = elementPrototype;
+        list.appendChild(proto)
+        // @ts-ignore
+        document.querySelector("#latest > #input").focus()
+        this.showToast("History cleared", "green")
+    }
+
+    showModal(template:any) {
+        var modal:any = document.getElementById("modal");
+        var inner:any = document.getElementById("modal-inner");
+    
+        inner.innerHTML = template.html
+    
+        modal.style.display = "block";
+    
+        // @ts-ignore 
+        var span:HTMLElement = document.getElementsByClassName("close")[0];
+    
+        // @ts-ignore 
+        document.querySelector("#latest > #input").blur()
+    
+    
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    
+        window.onclick = function(event) {
+            if (event.target == modal) {
+            modal.style.display = "none";
+            }
+        }
+    }
+
+    showToast(text:any, color = "hover", time=3000, autoClose = true) {
+        // @ts-ignore
+        var x:HTMLElement = document.getElementById("snackbar");
+        x.className = "show";
+        x.style.backgroundColor = "var(--"+color+")" 
+        x.innerHTML = text;
+        if(autoClose) {
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
+        }
+    }
+
+    closeToast() {
+        // @ts-ignore
+        var x:HTMLElement = document.getElementById("snackbar");
+        x.className = x.className.replace("show", "");
+    }
+
+    
+
 }
+
+ 
 
 export const modals = {
     "help": {
@@ -178,55 +236,6 @@ export const modals = {
     }
 }
 
-document.addEventListener("solve",(e) => {
-    if(!showedSolve) {
-        showedSolve = true
-        showToast("Solve is not fully supported.","orange",3000)
-    }
-})
-
-export function showModal(template:any) {
-    var modal:any = document.getElementById("modal");
-    var inner:any = document.getElementById("modal-inner");
-
-    inner.innerHTML = template.html
-
-    modal.style.display = "block";
-
-    // @ts-ignore 
-    var span:HTMLElement = document.getElementsByClassName("close")[0];
-
-    // @ts-ignore 
-    document.querySelector("#latest > #input").blur()
-
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-        modal.style.display = "none";
-        }
-    }
-}
-
-export function showToast(text:any, color = "hover", time=3000, autoClose = true) {
-    // @ts-ignore
-    var x:HTMLElement = document.getElementById("snackbar");
-    x.className = "show";
-    x.style.backgroundColor = "var(--"+color+")" 
-    x.innerHTML = text;
-    if(autoClose) {
-        setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
-    }
-}
-
-export function closeToast() {
-    // @ts-ignore
-    var x:HTMLElement = document.getElementById("snackbar");
-    x.className = x.className.replace("show", "");
-}
 
 function showKeyboard() {
     // @ts-ignore

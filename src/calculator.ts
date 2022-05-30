@@ -71,5 +71,5 @@ export function setConfig(config: any) {
     precision: config.math.precision,
     predictable: config.math.predictable,
     randomSeed: config.math.randomSeed
-})
+  })
 }
