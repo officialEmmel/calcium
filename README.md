@@ -2,4 +2,7 @@
 
 Minimalistic and text-based calculator written in vanilla ts and html with vite.js 
 
-Demo: https://calc.emmelnet.systems
+## still in development
+Deployable version see branch [deploy](https://github.com/officialEmmel/calcium/tree/deploy/)
+
+Demo version: https://calc.pages.dev (hosted on cloudflare pages)
