@@ -1,4 +1,4 @@
-import {parse, parser, type Parser, config, createUnit} from "mathjs";
+import {parser,createUnit} from "mathjs";
 //const nerdamer = require("nerdamer");
 
 export class Calculator {
@@ -79,7 +79,6 @@ export class Calculator {
     let data = await response.json()
     data = data["eur"]
     let units:any = {}
-    let i = 0
     units["EUR"] = {
         definition: "",
         aliases: ["euro", "euros", "Euro", "Euros", "eur"],
@@ -94,7 +93,6 @@ export class Calculator {
                 definition: (1/element).toString() + " EUR",
                 aliases: [key],
             }
-            i++
         }
     }
     createUnit(units,{override: true})

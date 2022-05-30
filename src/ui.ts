@@ -261,7 +261,7 @@ export function toggleK(){
     else {hideKeyboard()}
 }
 
-let lastSize:Number = window.innerWidth
+//let lastSize:Number = window.innerWidth
 export let keyboardOverwritten = false
 
 window.onresize = function() {

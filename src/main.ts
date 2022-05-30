@@ -1,6 +1,6 @@
 import {Calculator} from "./calculator"
 import {UI, toggleK, modals} from "./ui"
-import {getConfig} from "./settings"
+//import {getConfig} from "./settings"
 
 
 class App {
@@ -14,7 +14,7 @@ class App {
     constructor() {
         
         //get config from local storage
-        this.config = getConfig()
+        //this.config = getConfig()
 
         // declare ui
         this.ui = new UI()
@@ -218,5 +218,6 @@ class App {
 
 }
 
+// @ts-ignore
 const APP = new App()
 
