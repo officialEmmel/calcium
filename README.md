@@ -1,4 +1,4 @@
-# CALCIUM (Deployment version)
+# CALCIUM 
 
 Minimalistic and text-based calculator written in vanilla ts and html with vite.js 
 
