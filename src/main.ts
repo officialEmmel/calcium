@@ -1,5 +1,7 @@
 import {Calculator} from "./calculator"
 import {UI, toggleK, modals} from "./ui"
+import {Keyboard} from "./keyboard_new"
+
 //import {getConfig} from "./settings"
 
 
@@ -11,6 +13,7 @@ class App {
     draft: string
     ui: UI
     calculator: Calculator
+    keyboard: any
     constructor() {
         
         //get config from local storage
@@ -18,6 +21,8 @@ class App {
 
         // declare ui
         this.ui = new UI()
+
+        this.keyboard = new Keyboard()
 
         //load history and set curr index
         this.history = this.getHistory()
