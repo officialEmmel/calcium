@@ -34,6 +34,8 @@ class App {
     
         //set EventListeners
         this.setEventListeners()
+
+        this.ui.showToast("This calculator is still in development.", "orange")
     }   
 
 
