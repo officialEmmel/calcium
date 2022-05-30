@@ -140,8 +140,8 @@ export class UI {
  
 
 export const modals = {
-    "help": {
-        "html": `
+    help: {
+        html: `html
             <div class="padding: 0; margin: 0; ">
                 <h2>Help</h2>
                 <h4>Basic usage</h4>
@@ -190,8 +190,8 @@ export const modals = {
             </div>  
         `
     },
-    "settings": {
-        "html": `
+    settings: {
+        html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Settings</h2>
                 <h3>Calculator</h3>
@@ -224,8 +224,8 @@ export const modals = {
             </div>  
         `
     },
-    "about": {
-        "html": `
+    about: {
+        html: `
             <div class="padding: 0; margin: 0; ">
                 <h2 style="text-align: center;">*App name*</h2>
                 <h4 style="text-align: center;">A leightweight calculator with focus on productivity and minimalism.</h4>

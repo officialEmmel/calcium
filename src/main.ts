@@ -1,6 +1,5 @@
-import {calculate, createParser, setConfig} from "./calculator"
-import {getCurrencies}  from "./currency"
-import {UI, toggleK, keyboardOverwritten, modals} from "./ui"
+import {Calculator} from "./calculator"
+import {UI, toggleK, modals} from "./ui"
 import {getConfig} from "./settings"
 
 
@@ -11,6 +10,7 @@ class App {
     currentIndex: any
     draft: string
     ui: UI
+    calculator: Calculator
     constructor() {
         
         //get config from local storage
@@ -23,27 +23,21 @@ class App {
         this.history = this.getHistory()
         this.currentIndex = this.history.length
 
-        //loading parser from local storage or create new one
-        this.parser = createParser()
+        //create calculator with parser
+        this.calculator = new Calculator()
+
+        //download currencies and create new units (async)
+        this.calculator.getCurrencies()
 
         //set draft
         this.draft = ""
-        
-        //download currencies and create new units
-        getCurrencies()
-
+    
         //set EventListeners
         this.setEventListeners()
     }   
 
-    getHistory() {
-        let history:any = []
 
-        // @ts-ignore
-        try{history = JSON.parse(localStorage.getItem("history")).history} catch(err) {}
-
-        return history
-    }
+    //#region EventListeners
 
     setEventListeners() {
         var input:any = document.querySelector("#latest > #input")
@@ -54,6 +48,18 @@ class App {
     removeEventListeners(input:any) { 
         input.removeEventListener("keyup", () => {this.setPrev()})
         input.removeEventListener("keydown", (event:any) => {this.keypress(event)});
+    }
+
+    //#endregion
+
+    //#region History
+    getHistory() {
+        let history:any = []
+
+        // @ts-ignore
+        try{history = JSON.parse(localStorage.getItem("history")).history} catch(err) {}
+
+        return history
     }
 
     setHistory(amount:any) {
@@ -75,6 +81,18 @@ class App {
         input.value = this.history[this.currentIndex]
     }
 
+    clearHistory() {
+        this.history = []
+        this.currentIndex = 0
+        this.draft = ""
+        this.parser.clear()
+        localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
+        localStorage.setItem("history", this.history)
+    }
+
+    //#endregion
+
+    //#region I/O
     setOut() {
         var input:any = document.querySelector("#latest > #input")
         var e = this.parse(input.value, false)
@@ -121,14 +139,8 @@ class App {
         this.ui.previewOutput(e)
     }
 
-    clearHistory() {
-        this.history = []
-        this.currentIndex = 0
-        this.draft = ""
-        this.parser.clear()
-        localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
-        localStorage.setItem("history", this.history)
-    }
+    //#endregion
+
 
     keypress(event:any) {
         if (event.key === "Enter") {
@@ -201,7 +213,7 @@ class App {
                 }
             } else {return "unknown command. you can see all commands: <b>!help</b>"}
         }
-        return calculate(this.parser, exp, prev)
+        return this.calculator.calculate(exp, prev)
     }
 
 }
