@@ -261,17 +261,17 @@ export function toggleK(){
     else {hideKeyboard()}
 }
 
-let lastSize:Number = window.innerWidth
+//let lastSize:Number = window.innerWidth
 export let keyboardOverwritten = false
 
-window.onresize = function() {
-    if(window.innerWidth < 600 && !keyboardOverwritten) {
-        showKeyboard()
-    } else {
-        hideKeyboard()
-    }
-}
+// window.onresize = function() {
+//     if(window.innerWidth < 600 && !keyboardOverwritten) {
+//         showKeyboard()
+//     } else {
+//         hideKeyboard()
+//     }
+// }
 
-if(window.innerWidth < 600 && !keyboardOverwritten) {
-    showKeyboard()
-}
+// if(window.innerWidth < 600 && !keyboardOverwritten) {
+//     showKeyboard()
+// }

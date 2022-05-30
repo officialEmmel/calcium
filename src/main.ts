@@ -1,6 +1,6 @@
 import {Calculator} from "./calculator"
 import {UI, toggleK, modals} from "./ui"
-import {getConfig} from "./settings"
+//import {getConfig} from "./settings"
 
 
 class App {
@@ -14,7 +14,7 @@ class App {
     constructor() {
         
         //get config from local storage
-        this.config = getConfig()
+        //this.config = getConfig()
 
         // declare ui
         this.ui = new UI()
@@ -34,6 +34,8 @@ class App {
     
         //set EventListeners
         this.setEventListeners()
+
+        this.ui.showToast("This calculator is still in development.", "orange")
     }   
 
 
@@ -85,8 +87,8 @@ class App {
         this.history = []
         this.currentIndex = 0
         this.draft = ""
-        this.parser.clear()
-        localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
+        this.calculator.parser.clear()
+        localStorage.setItem("parser", JSON.stringify(this.calculator.parser.getAll()))
         localStorage.setItem("history", this.history)
     }
 
@@ -114,7 +116,7 @@ class App {
     
         this.currentIndex = this.history.length
     
-        localStorage.setItem("parser", JSON.stringify(this.parser.getAll()))
+        localStorage.setItem("parser", JSON.stringify(this.calculator.parser.getAll()))
     
     }
     
@@ -218,5 +220,6 @@ class App {
 
 }
 
+// @ts-ignore
 const APP = new App()
 
