@@ -94,7 +94,7 @@ class App {
         this.draft = ""
         this.calculator.parser.clear()
         localStorage.setItem("parser", JSON.stringify(this.calculator.parser.getAll()))
-        localStorage.setItem("history", this.history)
+        localStorage.setItem("history", '{"history":[]}')
     }
 
     //#endregion
