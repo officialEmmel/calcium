@@ -70,7 +70,7 @@ class App {
     }
 
     setHistory(amount:any) {
-        if(history.length == 0) {
+        if(this.history.length <= 0) {
             return
         }
         
