@@ -4,7 +4,7 @@ interface KeySet {
         0: {
             key: string,
             id: string,
-            value: string,
+            value: string|((message?:any)=>void),
         }
         1: {
             key: string,
@@ -132,7 +132,7 @@ interface KeySet {
 const keySet1: KeySet = {
     name: "keySet1",
     // f() !cmd up down
-    0: {0:{key:"f()",id:"switch_1",value:""},1:{key:"!cmd",id:"switch_2",value:""},2:{key:"&uarr;",id:"up",value:""},3:{key:"&darr;",id:"down",value:""}},
+    0: {0:{key:"f()",id:"switch_1",value:alert},1:{key:"!cmd",id:"switch_2",value:""},2:{key:"&uarr;",id:"up",value:""},3:{key:"&darr;",id:"down",value:""}},
 
     // ans ^ <= /
     1: {0:{key:"ans",id:"ans",value:"ans"},1:{key:"^",id:"pow",value:"^"},2:{key:"&larr;",id:"del",value:""},3:{key:"&divide;",id:"divide",value:"/"}},
@@ -326,8 +326,9 @@ export class Keyboard {
 
     }
 
-    parseSpecialKeys(key: string) {
-    
+    parseSpecialKeys(key: string|any) {
+        key("test")
+        return;
         switch(key) {
             case "equals":
                 // equals
