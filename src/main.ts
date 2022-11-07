@@ -1,6 +1,6 @@
 import { Calculator } from "./calculator";
 import { UI, toggleK, modals } from "./ui";
-import { Keyboard } from "./keyboard_new";
+// import { Keyboard } from "./keyboard_new";
 
 //import {getConfig} from "./settings"
 
@@ -20,7 +20,7 @@ class App {
     // declare ui
     this.ui = new UI();
 
-    this.keyboard = new Keyboard();
+    // this.keyboard = new Keyboard();
 
     //load history and set curr index
     this.history = this.getHistory();
@@ -68,8 +68,8 @@ class App {
   getHistory() {
     let history: any = [];
 
-    // @ts-ignore
     try {
+      // @ts-ignore
       history = JSON.parse(localStorage.getItem("history")).history;
     } catch (err) {}
 
