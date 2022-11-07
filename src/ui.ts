@@ -3,6 +3,7 @@ let current = 0;
 let showedSolve = false;
 
 let elementPrototype = `
+    <button id="more">...</button>
     <input type="text" id="input" class="input" placeholder="Type here...">
     <p id="result" class="result"></p>
 `;
@@ -52,6 +53,14 @@ export class UI {
 
     listItem.setAttribute("id", "id" + current);
     listItem.classList.add("hoverable");
+    listItem.querySelector("#more").style.display = "block";
+
+    listItem.querySelector("#more").onclick = (e: any) => {
+      let input = e.target.parentElement.children[1].value;
+      let output = e.target.parentElement.children[2].innerHTML;
+      this.showModal(modals.more(input, output));
+    };
+
     listItem.addEventListener("click", async (e: any) => {
       let l: any = null;
       if (e.target.id == "input") {
@@ -230,6 +239,29 @@ export const modals = {
                 <h4 style="text-align: center;">Made with ❤️ by emmel</h4>
             </div>  
         `,
+  },
+  more: (input: any, output: any) => {
+    return {
+      html: `<div class="padding: 0; margin: 0; ">
+                <div style="background-color:var(--hover)" class="listItem" >
+                  <input
+                    tabindex="-1"
+                    type="text"
+                    id="input"
+                    class="input"
+                    placeholder="!help for usage..."
+                    value="${input}"
+                    style="background-color:var(--hover);"
+                    readonly
+                  />
+                  <p id="result" class="result">${output}</p>
+                </div>
+                <button class="btn" onclick="() => {copy('${output}')}" id="copy">Copy Result</button>
+                <button class="btn" onclick="async () => {await navigator.clipboard.writeText(${input});}" id="copy">Copy Input</button>
+                <button class="btn" onclick="async () => {await navigator.clipboard.writeText(${input} = ${output});}" id="copy">Copy full Calculation</button>
+                <button class="btn" id="copy">Re-Execute</button>
+            </div>  `,
+    };
   },
 };
 
