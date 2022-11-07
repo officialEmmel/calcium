@@ -1,147 +1,144 @@
+import { MANIFEST } from "./manifest";
 let current = 0;
-let showedSolve = false
+let showedSolve = false;
 
 let elementPrototype = `
     <input type="text" id="input" class="input" placeholder="Type here...">
     <p id="result" class="result"></p>
-`
+`;
 
 export class UI {
-    constructor() {
-        document.addEventListener("solve",() => {
-            if(!showedSolve) {
-                showedSolve = true
-                this.showToast("Solve is not fully supported.","orange",3000)
-            }
-        })
-        
+  constructor() {
+    document.addEventListener("solve", () => {
+      if (!showedSolve) {
+        showedSolve = true;
+        this.showToast("Solve is not fully supported.", "orange", 3000);
+      }
+    });
+  }
+
+  previewOutput(output: any) {
+    var preview: any = document.querySelector("#latest > #result");
+    preview.style.color = "var(--gray)";
+    preview.innerHTML = output;
+
+    if (current < 8) {
+      return;
+    }
+    preview.scrollIntoView();
+  }
+
+  previewError(output: any) {
+    var preview: any = document.querySelector("#latest > #result");
+    preview.style.color = "var(--red)";
+    preview.innerHTML = output;
+  }
+
+  setOutput(output: any) {
+    var input: any = document.querySelector("#latest > #input");
+    var out: any = document.querySelector("#latest > #result");
+    var listItem: any = document.querySelector("#latest");
+    var list: any = document.querySelector("#list");
+
+    var proto: any = document.createElement("li");
+    proto.setAttribute("id", "latest");
+    proto.setAttribute("class", "listItem");
+    proto.innerHTML = elementPrototype;
+
+    input.readOnly = true;
+
+    out.style.color = "var(--font)";
+    out.innerHTML = output;
+
+    listItem.setAttribute("id", "id" + current);
+    listItem.classList.add("hoverable");
+    listItem.addEventListener("click", async (e: any) => {
+      let l: any = null;
+      if (e.target.id == "input") {
+        l = e.target.parentNode.querySelector("#result");
+      } else if (new RegExp("^id[0-9]+$").test(e.target.id)) {
+        l = e.target.querySelector("#result");
+      } else {
+        l = e.target;
+      }
+      await navigator.clipboard.writeText(l.innerHTML);
+      this.showToast("Copied to clipboard", "green");
+    });
+
+    list.appendChild(proto);
+
+    // @ts-ignore
+    document.querySelector("#latest > #input").focus();
+
+    showedSolve = false;
+    current++;
+  }
+
+  clearUi() {
+    var listItems: any = document.getElementsByClassName("listItem");
+    while (listItems.length > 0) {
+      listItems[0].remove();
     }
 
-    previewOutput(output:any) {
-        var preview:any = document.querySelector("#latest > #result")
-        preview.style.color = "var(--gray)"
-        preview.innerHTML = output;
-    
-        if(current < 8){return}
-        preview.scrollIntoView()
-    }
+    var list: any = document.getElementById("list");
+    var proto: any = document.createElement("li");
+    proto.setAttribute("id", "latest");
+    proto.setAttribute("class", "listItem");
+    proto.innerHTML = elementPrototype;
+    list.appendChild(proto);
+    // @ts-ignore
+    document.querySelector("#latest > #input").focus();
+    this.showToast("History cleared", "green");
+  }
 
-    previewError(output:any) {
-        var preview:any = document.querySelector("#latest > #result")
-        preview.style.color = "var(--red)"
-        preview.innerHTML = output;
-    }
+  showModal(template: any) {
+    var modal: any = document.getElementById("modal");
+    var inner: any = document.getElementById("modal-inner");
 
-    setOutput(output:any) {
-        var input:any = document.querySelector("#latest > #input")
-        var out:any = document.querySelector("#latest > #result")
-        var listItem:any = document.querySelector("#latest")
-        var list:any = document.querySelector("#list")
-    
-        var proto:any = document.createElement("li")
-        proto.setAttribute("id", "latest")
-        proto.setAttribute("class", "listItem")
-        proto.innerHTML = elementPrototype;
-    
-        input.readOnly = true;
-    
-    
-        out.style.color = "var(--font)"
-        out.innerHTML = output;
-    
-        listItem.setAttribute("id", "id"+current)
-        listItem.classList.add("hoverable")
-        listItem.addEventListener("click", async (e:any) => {
-            let l:any = null
-            if(e.target.id == "input") {
-                l = e.target.parentNode.querySelector("#result")
-            } else if(new RegExp("^id[0-9]+$").test(e.target.id)) {
-                l = e.target.querySelector("#result")
-            } else {
-                l = e.target
-            }
-            await navigator.clipboard.writeText(l.innerHTML)
-            this.showToast("Copied to clipboard", "green")
-        })
-    
-        list.appendChild(proto)
-    
-        // @ts-ignore
-        document.querySelector("#latest > #input").focus()
-    
-        showedSolve = false
-        current++
-    }
+    inner.innerHTML = template.html;
 
-    clearUi() {
-        var listItems:any = document.getElementsByClassName("listItem")
-        while(listItems.length > 0) {
-            listItems[0].remove()
-        }
-    
-        var list:any = document.getElementById("list")
-        var proto:any = document.createElement("li")
-        proto.setAttribute("id", "latest")
-        proto.setAttribute("class", "listItem")
-        proto.innerHTML = elementPrototype;
-        list.appendChild(proto)
-        // @ts-ignore
-        document.querySelector("#latest > #input").focus()
-        this.showToast("History cleared", "green")
-    }
+    modal.style.display = "block";
 
-    showModal(template:any) {
-        var modal:any = document.getElementById("modal");
-        var inner:any = document.getElementById("modal-inner");
-    
-        inner.innerHTML = template.html
-    
-        modal.style.display = "block";
-    
-        // @ts-ignore 
-        var span:HTMLElement = document.getElementsByClassName("close")[0];
-    
-        // @ts-ignore 
-        document.querySelector("#latest > #input").blur()
-    
-    
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-    
-        window.onclick = function(event) {
-            if (event.target == modal) {
-            modal.style.display = "none";
-            }
-        }
-    }
+    // @ts-ignore
+    var span: HTMLElement = document.getElementsByClassName("close")[0];
 
-    showToast(text:any, color = "hover", time=3000, autoClose = true) {
-        // @ts-ignore
-        var x:HTMLElement = document.getElementById("snackbar");
-        x.className = "show";
-        x.style.backgroundColor = "var(--"+color+")" 
-        x.innerHTML = text;
-        if(autoClose) {
-            setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
-        }
-    }
+    // @ts-ignore
+    document.querySelector("#latest > #input").blur();
 
-    closeToast() {
-        // @ts-ignore
-        var x:HTMLElement = document.getElementById("snackbar");
+    span.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+  }
+
+  showToast(text: any, color = "hover", time = 3000, autoClose = true) {
+    // @ts-ignore
+    var x: HTMLElement = document.getElementById("snackbar");
+    x.className = "show";
+    x.style.backgroundColor = "var(--" + color + ")";
+    x.innerHTML = text;
+    if (autoClose) {
+      setTimeout(function () {
         x.className = x.className.replace("show", "");
+      }, time);
     }
+  }
 
-    
-
+  closeToast() {
+    // @ts-ignore
+    var x: HTMLElement = document.getElementById("snackbar");
+    x.className = x.className.replace("show", "");
+  }
 }
 
- 
-
 export const modals = {
-    help: {
-        html: `html
+  help: {
+    html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Help</h2>
                 <h4>Basic usage</h4>
@@ -188,10 +185,10 @@ export const modals = {
                 <p style="font-size:12px; color:var(--orange)">*Using solve() you might miss some features as we use another libary for this function</p>
                 <p>You can find all operators <a href="https://mathjs.org/docs/expressions/syntax.html">here.</a></p>
             </div>  
-        `
-    },
-    settings: {
-        html: `
+        `,
+  },
+  settings: {
+    html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Settings</h2>
                 <h3>Calculator</h3>
@@ -222,47 +219,53 @@ export const modals = {
                 </ul>
                 <h4>What does each option do? Take a look <a href="https://mathjs.org/docs/core/configuration.html">here.</a></h4>
             </div>  
-        `
-    },
-    about: {
-        html: `
+        `,
+  },
+  about: {
+    html: `
             <div class="padding: 0; margin: 0; ">
-                <h2 style="text-align: center;">*App name*</h2>
+                <h2 style="text-align: center;">${MANIFEST.name}</h2>
                 <h4 style="text-align: center;">A leightweight calculator with focus on productivity and minimalism.</h4>
-                <h4 style="text-align: center;">v1.0.0 | <a href="https://github.com/officialEmmel/">Source code</a></h4>
+                <h4 style="text-align: center;">v${MANIFEST.version} | <a href="https://github.com/officialEmmel/calcium">Source code</a></h4>
                 <h4 style="text-align: center;">Made with ❤️ by emmel</h4>
             </div>  
-        `
-    }
-}
-
+        `,
+  },
+};
 
 function showKeyboard() {
-    // @ts-ignore
-    if(document.getElementById("keyboard").style.display == "block") {return}
-    // @ts-ignore
-    document.getElementById("list").classList.toggle("top");
-    // @ts-ignore
-    document.getElementById("keyboard").style.display = "block";
+  // @ts-ignore
+  if (document.getElementById("keyboard").style.display == "block") {
+    return;
+  }
+  // @ts-ignore
+  document.getElementById("list").classList.toggle("top");
+  // @ts-ignore
+  document.getElementById("keyboard").style.display = "block";
 }
 
 function hideKeyboard() {
-    // @ts-ignore
-    if(document.getElementById("keyboard").style.display == "none") {return}
-    // @ts-ignore
-    document.getElementById("list").classList.toggle("top");
-    // @ts-ignore
-    document.getElementById("keyboard").style.display = "none";
+  // @ts-ignore
+  if (document.getElementById("keyboard").style.display == "none") {
+    return;
+  }
+  // @ts-ignore
+  document.getElementById("list").classList.toggle("top");
+  // @ts-ignore
+  document.getElementById("keyboard").style.display = "none";
 }
 
-export function toggleK(){
-    // @ts-ignore 
-    if(document.getElementById("keyboard").style.display == "none") {showKeyboard()}
-    else {hideKeyboard()}
+export function toggleK() {
+  // @ts-ignore
+  if (document.getElementById("keyboard").style.display == "none") {
+    showKeyboard();
+  } else {
+    hideKeyboard();
+  }
 }
 
 //let lastSize:Number = window.innerWidth
-export let keyboardOverwritten = false
+export let keyboardOverwritten = false;
 
 // window.onresize = function() {
 //     if(window.innerWidth < 600 && !keyboardOverwritten) {
