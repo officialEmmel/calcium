@@ -1,50 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes"> 
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
 
     <title>Calculator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet"> 
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- <link rel="stylesheet" href="/Emil/calculator2/style.css"> -->
-    <link rel="stylesheet" href="/src/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
     <div class="container" id="container">
-        <!-- <div id="navbar" class="sticky">
+      <!-- <div id="navbar" class="sticky">
             <a class="active" href="javascript:void(0)">Calculator</a>
         </div> -->
-        <ul class="list" id="list">
-            <!-- <li class="listItem" id="help">
+      <ul class="list" id="list">
+        <!-- <li class="listItem" id="help">
                 <p id="result" style="color: var(--gray);" class="result">type !help for usage</p>
             </li> -->
-            <li class="listItem" id="latest">
-                <!-- <span class="close">&times;</span> -->
-                <input tabindex="-1" type="text" id="input" class="input" placeholder="!help for usage...">
-                <p id="result" class="result"></p>
-            </li>
-        </ul>
-        <div style="display: none;" id="keyboard" class="keyContainer bottom">
-            
-        </div>
+        <li class="listItem" id="latest">
+          <!-- <span class="close">&times;</span> -->
+          <div class="input-container">
+            <input
+              tabindex="-1"
+              type="text"
+              id="input"
+              class="input"
+              placeholder="!help for usage..."
+            />
+            <p id="result" class="result"></p>
+          </div>
+        </li>
+      </ul>
+      <div
+        style="display: none"
+        id="keyboard"
+        class="keyContainer bottom"
+      ></div>
     </div>
 
     <div id="snackbar"></div>
 
     <div id="modal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <div id="modal-inner">
-
-          </div>
-        </div>
-      
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modal-inner"></div>
+      </div>
     </div>
 
     <script type="module" src="/src/ui.ts"></script>
@@ -52,9 +65,6 @@
     <script type="module" src="/src/main.ts"></script>
     <!-- <script src="src/keyboard.ts"></script> -->
 
-    <script>
-
-    </script>
-
-</body>
+    <script></script>
+  </body>
 </html>
