@@ -68,8 +68,8 @@ class App {
   getHistory() {
     let history: any = [];
 
-    // @ts-ignore
     try {
+      // @ts-ignore
       history = JSON.parse(localStorage.getItem("history")).history;
     } catch (err) {}
 
