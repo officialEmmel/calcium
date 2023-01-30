@@ -276,10 +276,13 @@ class App {
             }
             return "about";
           case "k":
-            // if(!prev){toggleK(); return "keyboard"}
             if (!prev) {
-              return "keyboard not available in deploy-mode";
+              toggleK();
+              return "keyboard";
             }
+            // if (!prev) {
+            //   return "keyboard not available in deploy-mode";
+            // }
             return "toggles keyboard";
         }
       } else {
