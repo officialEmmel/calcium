@@ -1,3 +1,4 @@
+import { e } from "mathjs";
 import { Calculator } from "./calculator";
 import { UI, toggleK, modals } from "./ui";
 // import { Keyboard } from "./keyboard_new";
@@ -176,6 +177,7 @@ class App {
   //#endregion
 
   keypress(event: any) {
+    this.inputAutoComplete(event);
     if (event.key === "Enter") {
       //event.preventDefault();
       this.setOut();
@@ -187,6 +189,49 @@ class App {
     } else if (event.key === "ArrowDown") {
       event.preventDefault();
       this.setHistory(1);
+    }
+  }
+
+  inputAutoComplete(event: any) {
+    let input: any = document.querySelector("#latest > #input");
+    if (event.key == "(") {
+      if (input.selectionStart != input.selectionEnd) {
+        event.preventDefault();
+        input.value =
+          input.value.substring(0, input.selectionStart) +
+          "(" +
+          input.value.substring(input.selectionStart, input.selectionEnd) +
+          ")" +
+          input.value.substring(input.selectionEnd, input.value.length);
+        input.selectionEnd = input.selectionStart;
+      } else {
+        let start = input.selectionStart;
+        event.preventDefault();
+        input.value =
+          input.value.substring(0, input.selectionStart) +
+          "()" +
+          input.value.substring(input.selectionEnd, input.value.length);
+
+        input.selectionStart = start + 1;
+        input.selectionEnd = start + 1;
+      }
+    }
+
+    if (event.key == "Backspace") {
+      if (input.selectionStart != input.selectionEnd) {
+        return;
+      }
+      if (input.value[input.selectionStart - 1] == "(") {
+        if (input.value[input.selectionStart] == ")") {
+          event.preventDefault();
+          let start = input.selectionStart;
+          input.value =
+            input.value.substring(0, input.selectionStart - 1) +
+            input.value.substring(input.selectionStart + 1, input.value.length);
+          input.selectionStart = start - 1;
+          input.selectionEnd = start - 1;
+        }
+      }
     }
   }
 
@@ -276,7 +321,10 @@ class App {
             }
             return "about";
           case "k":
-            // if(!prev){toggleK(); return "keyboard"}
+            // if (!prev) {
+            //   toggleK();
+            //   return "keyboard";
+            // }
             if (!prev) {
               return "keyboard not available in deploy-mode";
             }
