@@ -1,15 +1,22 @@
 /* DARK MODE SCHEME */
-@media (prefers-color-scheme: dark) {}
+@media (prefers-color-scheme: dark) {
+  a {
+    color: #54a4ff;
+    background-color: transparent;
+    text-decoration: none;
+  }
+}
 
 :root {
   --bg: #121212;
   --hover: #272727;
   --font: white;
+  --font-transparent: rgba(255, 255, 255, 0.5);
   --yellow: #ffc814;
   --orange: #ff7214;
   --blue: #0982fc;
   --gray: #6e6e6e;
-  --red: #7a2a2a;
+  --red: #fc4848;
   --green: #349234;
   --key: #8a8a8a;
 }
@@ -56,6 +63,29 @@ input {
   /* line-height: 50%; */
 }
 
+.centered {
+  text-align: center;
+
+}
+
+.step {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: var(--hover);
+  font-size: 18px;
+}
+
+
+code {
+  color: var(--yellow);
+  font-family: "JetBrains Mono", monospace;
+  background-color: var(--bg);
+  padding: 2px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
 .container {
   padding-left: 13px;
   padding-right: 13px;
@@ -96,7 +126,8 @@ a:hover {
   padding: 0;
   margin-bottom: 12px;
   background-color: #4d4141;
-  max-width: 10%;
+  width: 30%;
+  max-width: 100px;
   padding: 2px;
 }
 
@@ -172,10 +203,24 @@ code {
   color: var(--font);
   margin: 5% auto;
   /* 15% from the top and centered */
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-top: 5px;
+
   border-radius: 12px;
   width: 80%;
   /* Could be more or less, depending on screen size */
+}
+
+.modal.show {
+  -webkit-animation: fadein 0.2s;
+  animation: fadein 0.2s;
+}
+
+.modal.hide {
+  -webkit-animation: fadeout 0.2s;
+  animation: fadeout 0.25s;
 }
 
 .close {
@@ -187,7 +232,7 @@ code {
 
 .close:hover,
 .close:focus {
-  color: rgb(255, 255, 255);
+  color: var(--red);
   text-decoration: none;
   cursor: pointer;
 }
@@ -207,12 +252,10 @@ code {
   bottom: 30px;
 }
 
-/* Show the snackbar when clicking on a button (class added with JavaScript) */
+
 #snackbar.show {
   visibility: visible;
-  /* Show the snackbar */
-  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-However, delay the fade out process for 2.5 seconds */
+
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
@@ -351,6 +394,7 @@ html,
 }
 
 #more {
+  font-family: 'JetBrains Mono', monospace;
   display: none;
 
   position: absolute;
@@ -363,7 +407,7 @@ html,
   background-color: transparent;
   font-weight: 700;
   border: none;
-  color: var(--font);
+  color: var(--font-transparent);
   font-size: 24px;
 }
 

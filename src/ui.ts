@@ -1,4 +1,5 @@
 import { MANIFEST } from "./manifest";
+import { Settings } from "./settings";
 let current = 0;
 let showedSolve = false;
 
@@ -16,6 +17,23 @@ export class UI {
         this.showToast("Solve is not fully supported.", "orange", 3000);
       }
     });
+
+    var modal: any = document.getElementById("modal");
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.classList.remove("show");
+        modal.classList.add("hide");
+        setTimeout(() => {
+          modal.style.display = "none";
+          modal.classList.remove("hide");
+        }, 200);
+      }
+    };
+  }
+
+  setColor(color: string) {
+    var root = document.documentElement;
+    root.style.setProperty("--yellow", color);
   }
 
   previewOutput(output: any) {
@@ -59,12 +77,74 @@ export class UI {
       let input = e.target.parentElement.children[1].value;
       let output = e.target.parentElement.children[2].innerHTML;
       this.showModal(modals.more(input, output));
+      var res = document.getElementById("copy_res");
+      var inp = document.getElementById("copy_in");
+      var both = document.getElementById("copy_both");
+
+      // @ts-ignore
+      res.addEventListener("click", function () {
+        try {
+          navigator.clipboard.writeText(output);
+          // @ts-ignore
+          res.innerHTML = "Copied!";
+          // @ts-ignore
+          res.style.backgroundColor = "var(--green)";
+          setTimeout(function () {
+            // @ts-ignore
+            res.innerHTML = "Copy Result";
+            // @ts-ignore
+            res.style.backgroundColor = "var(--hover)";
+          }, 1000);
+        } catch (err) {
+          console.error("Failed to copy: ", err);
+        }
+      });
+
+      // @ts-ignore
+      inp.addEventListener("click", function () {
+        try {
+          navigator.clipboard.writeText(input);
+          // @ts-ignore
+          inp.innerHTML = "Copied!";
+          // @ts-ignore
+          inp.style.backgroundColor = "var(--green)";
+          setTimeout(function () {
+            // @ts-ignore
+            inp.innerHTML = "Copy Input";
+            // @ts-ignore
+            inp.style.backgroundColor = "var(--hover)";
+          }, 1000);
+        } catch (err) {
+          console.error("Failed to copy: ", err);
+        }
+      });
+
+      // @ts-ignore
+      both.addEventListener("click", function () {
+        try {
+          navigator.clipboard.writeText(input + " = " + output);
+          // @ts-ignore
+          both.innerHTML = "Copied!";
+          // @ts-ignore
+          both.style.backgroundColor = "var(--green)";
+          setTimeout(function () {
+            // @ts-ignore
+            both.innerHTML = "Copy full Calculation";
+            // @ts-ignore
+            both.style.backgroundColor = "var(--hover)";
+          }, 1000);
+        } catch (err) {
+          console.error("Failed to copy: ", err);
+        }
+      });
     };
 
     listItem.addEventListener("click", async (e: any) => {
       let l: any = null;
       if (e.target.id == "input") {
         l = e.target.parentNode.querySelector("#result");
+      } else if (e.target.id == "more") {
+        return;
       } else if (new RegExp("^id[0-9]+$").test(e.target.id)) {
         l = e.target.querySelector("#result");
       } else {
@@ -108,32 +188,35 @@ export class UI {
 
     modal.style.display = "block";
 
+    modal.classList.add("show");
+
     // @ts-ignore
     var span: HTMLElement = document.getElementsByClassName("close")[0];
 
     // @ts-ignore
     document.querySelector("#latest > #input").blur();
-
     span.onclick = function () {
-      modal.style.display = "none";
-    };
-
-    window.onclick = function (event) {
-      if (event.target == modal) {
+      modal.classList.remove("show");
+      modal.classList.add("hide");
+      setTimeout(() => {
         modal.style.display = "none";
-      }
+        modal.classList.remove("hide");
+      }, 200);
     };
   }
 
   showToast(text: any, color = "hover", time = 3000, autoClose = true) {
     // @ts-ignore
-    var x: HTMLElement = document.getElementById("snackbar");
+    var l: any = document.getElementById("snackbars");
+    var x: HTMLElement = document.createElement("div");
+    x.setAttribute("id", "snackbar");
     x.className = "show";
     x.style.backgroundColor = "var(--" + color + ")";
     x.innerHTML = text;
+    l.appendChild(x);
     if (autoClose) {
       setTimeout(function () {
-        x.className = x.className.replace("show", "");
+        x.remove();
       }, time);
     }
   }
@@ -149,58 +232,72 @@ export const modals = {
   help: {
     html: `
             <div class="padding: 0; margin: 0; ">
-                <h2>Help</h2>
-                <h4>Basic usage</h4>
-                <ul>
-                    <li><code>2 + 2</code> returns <code>4</code></li>
-                    <li><code>2 * sqrt(9)</code> returns <code>6</code></li>
-                    <li><code>51 cm to inch</code> returns <code>20.07 inch</code></li>
-                    <li><code>1 usd to eur</code> returns <code>0.94 eur</code></li>
-                </ul>
-                <h4>Commands</h4>
-                <ul>
-                    <li><code>!help</code>: Shows help</li>
-                    <li><code>!clear</code>: Clears history and all variables</li>
-                    <li><code>!about</code>: Shows about screen</li>
-                </ul>  
-                <h4>Operators (Overview)</h4>
-                <ul>
-                    <li><code>+</code> Add</li>
-                    <li><code>-</code> Substract</li>
-                    <li><code>*</code> Multiply</li>
-                    <li><code>/</code> Divide</li>
-                    <li><code>^</code> Power</li>
-                    <li><code>%</code> Modulo</li>
-                    <li><code>pi</code> Pi</li>
-                    <li><code>e</code> Euler's number</li>
-                    <li><code>sqrt()</code> Square root</li>
-                    <li><code>sin()</code> Sine</li>
-                    <li><code>cos()</code> Cosine</li>
-                    <li><code>tan()</code> Tangent</li>
-                    <li><code>asin()</code> Arc sine</li>
-                    <li><code>acos()</code> Arc cosine</li>
-                    <li><code>atan()</code> Arc tangent</li>
-                    <li><code>log()</code> Logarithm</li>
-                    <li><code>ln()</code> Natural logarithm</li>
-                    <li><code>exp()</code> Exponential</li>
-                    <li><code>rand</code> Random number</li>
-                    <li><code>solve()</code> Solves equation*</li>
-                    <li><code>fact()</code> Factorial</li>
-                    <li><code>abs()</code> Absolute value</li>
-                    <li><code>round()</code> Round</li>
-                    <li><code>ceil()</code> Ceil</li>
-                    <li><code>floor()</code> Floor</li>
-                </ul>  
+                <h2 class="centered">Help</h2>
+                <h4 style="margin-bottom: 10px;">Basic usage</h4>
+                <div class="step">
+                  <ul>
+                      <li><code>2 + 2</code> -> <code>4</code></li>
+                      <li><code>2 * sqrt(9)</code> -> <code>6</code></li>
+                      <li><code>51 cm to inch</code> -> <code>20.07 inch</code></li>
+                      <li><code>1 usd to eur</code> -> <code>0.94 eur</code></li>
+                  </ul>
+                </div>
+                <h4 style="margin-bottom: 10px;">Commands</h4>
+                <div class="step">
+                  <ul>
+                      <li><code>!help</code> Shows help</li>
+                      <li><code>!clear</code> Clears history and all variables</li>
+                      <li><code>!about</code> Shows about screen</li>
+                  </ul>  
+                </div>
+                <h4 style="margin-bottom: 10px;">Operators (Overview)</h4>
+                <div class="step">
+                  <ul>
+                      <li><code>+</code> Add</li>
+                      <li><code>-</code> Substract</li>
+                      <li><code>*</code> Multiply</li>
+                      <li><code>/</code> Divide</li>
+                      <li><code>^</code> Power</li>
+                      <li><code>%</code> Modulo</li>
+                      <li><code>pi</code> Pi</li>
+                      <li><code>e</code> Euler's number</li>
+                      <li><code>sqrt()</code> Square root</li>
+                      <li><code>sin()</code> Sine</li>
+                      <li><code>cos()</code> Cosine</li>
+                      <li><code>tan()</code> Tangent</li>
+                      <li><code>asin()</code> Arc sine</li>
+                      <li><code>acos()</code> Arc cosine</li>
+                      <li><code>atan()</code> Arc tangent</li>
+                      <li><code>log()</code> Logarithm</li>
+                      <li><code>ln()</code> Natural logarithm</li>
+                      <li><code>exp()</code> Exponential</li>
+                      <li><code>rand</code> Random number</li>
+                      <li><code>solve()</code> Solves equation*</li>
+                      <li><code>fact()</code> Factorial</li>
+                      <li><code>abs()</code> Absolute value</li>
+                      <li><code>round()</code> Round</li>
+                      <li><code>ceil()</code> Ceil</li>
+                      <li><code>floor()</code> Floor</li>
+                  </ul> 
+                </div> 
                 <p style="font-size:12px; color:var(--orange)">*Using solve() you might miss some features as we use another libary for this function</p>
                 <p>You can find all operators <a href="https://mathjs.org/docs/expressions/syntax.html">here.</a></p>
             </div>  
         `,
   },
-  settings: {
-    html: `
+  settings: (settings: Settings) => {
+    return {
+      html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Settings</h2>
-                <h3>Calculator</h3>
+                <h3>General</h3>
+                <ul>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="color">Accent Color:</label>
+                        <input class="conf" type="text" id="color" value="-">
+                    </li>
+                </ul>
+                <h3>MathJS Options</h3>
                 <ul>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
                         <label for="ep">Epsilon:</label>
@@ -221,14 +318,22 @@ export const modals = {
                             <option value="Fraction">Fraction</option>
                         </select>
                     </li>
-                    <li style="white-space:nowrap; margin-bottom: 15px;">
-                        <label for="prec">Precision:</label>
-                        <input class="conf" type="number" id="prec" value="-">
+                </ul>
+                <h4>Wonder what each option does? Take a look at <a href="https://mathjs.org/docs/core/configuration.html">MathJS Documentation.</a></h4>
+                <h3>Advanced Options</h3>
+                <ul>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="cjs">Custom JavaScript Snippet:</label>
+                        <input class="conf" type="text" id="cjs" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="ccss">Custom CSS Snippet:</label>
+                        <input class="conf" type="text" id="ccss" value="-">
                     </li>
                 </ul>
-                <h4>What does each option do? Take a look <a href="https://mathjs.org/docs/core/configuration.html">here.</a></h4>
-            </div>  
-        `,
+                <button class="btn" id="reset">Reset to default</button>
+                `,
+    };
   },
   about: {
     html: `
@@ -242,7 +347,12 @@ export const modals = {
   },
   more: (input: any, output: any) => {
     return {
-      html: `<div class="padding: 0; margin: 0; ">
+      html: `
+      &nbsp;
+      <script>
+        
+      </script>
+      <div class="padding: 0; margin: 0; ">
                 <div style="background-color:var(--hover)" class="listItem" >
                   <input
                     tabindex="-1"
@@ -256,11 +366,11 @@ export const modals = {
                   />
                   <p id="result" class="result">${output}</p>
                 </div>
-                <button class="btn" onclick="() => {copy('${output}')}" id="copy">Copy Result</button>
-                <button class="btn" onclick="async () => {await navigator.clipboard.writeText(${input});}" id="copy">Copy Input</button>
-                <button class="btn" onclick="async () => {await navigator.clipboard.writeText(${input} = ${output});}" id="copy">Copy full Calculation</button>
-                <button class="btn" id="copy">Re-Execute</button>
-            </div>  `,
+                <button class="btn" id="copy_res">Copy Result</button>
+                <button class="btn" id="copy_in">Copy Input</button>
+                <button class="btn" id="copy_both">Copy full Calculation</button>
+       </div>  
+            `,
     };
   },
 };
