@@ -1,12 +1,13 @@
 import { e } from "mathjs";
 import { Calculator } from "./calculator";
+import { Settings } from "./settings";
 import { UI, toggleK, modals } from "./ui";
 // import { Keyboard } from "./keyboard_new";
 
 //import {getConfig} from "./settings"
 
 class App {
-  config: any;
+  settings: Settings;
   parser: any;
   history: any;
   currentIndex: any;
@@ -15,20 +16,21 @@ class App {
   calculator: Calculator;
   keyboard: any;
   constructor() {
-    //get config from local storage
-    //this.config = getConfig()
-
     // declare ui
     this.ui = new UI();
 
     // this.keyboard = new Keyboard();
 
+    //create calculator with parser
+    this.calculator = new Calculator();
+
+    // create settings
+    this.settings = new Settings(this.calculator);
+    this.ui.setColor(this.settings.getConfig().general.accent_color);
+
     //load history and set curr index
     this.history = this.getHistory();
     this.currentIndex = this.history.length;
-
-    //create calculator with parser
-    this.calculator = new Calculator();
 
     //download currencies and create new units (async)
     this.calculator.getCurrencies();
@@ -235,6 +237,51 @@ class App {
     }
   }
 
+  settingsModal() {
+    let color = document.getElementById("color");
+
+    let ep = document.getElementById("ep");
+    let matrix = document.getElementById("matrix");
+    let number = document.getElementById("number");
+
+    let reset = document.getElementById("reset");
+
+    // @ts-ignore
+    color.value = this.settings.getConfig().general.accent_color;
+    // @ts-ignore
+    ep.value = this.settings.getConfig().math.epsilon;
+    // @ts-ignore
+    matrix.value = this.settings.getConfig().math.matrix;
+    // @ts-ignore
+    number.value = this.settings.getConfig().math.number;
+
+    color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setGeneralConfig("accent_color", e.target.value);
+      window.location.reload();
+    });
+
+    ep?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setMathConfig("epsilon", e.target.value);
+    });
+
+    matrix?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setMathConfig("matrix", e.target.value);
+    });
+
+    number?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setMathConfig("number", e.target.value);
+    });
+
+    reset?.addEventListener("click", (e) => {
+      this.settings.reset();
+      window.location.reload();
+    });
+  }
+
   parse(exp: any, prev: any) {
     const commands = [
       "clear",
@@ -306,7 +353,8 @@ class App {
             return "clear history";
           case "s":
             if (!prev) {
-              this.ui.showModal(modals.settings);
+              this.ui.showModal(modals.settings(this.settings));
+              this.settingsModal();
             }
             if (prev) {
               return "press enter for settings";
