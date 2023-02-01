@@ -239,6 +239,7 @@ class App {
 
   settingsModal() {
     let color = document.getElementById("color");
+    let bcolor =
 
     let ep = document.getElementById("ep");
     let matrix = document.getElementById("matrix");

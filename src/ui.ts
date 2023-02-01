@@ -9,6 +9,20 @@ let elementPrototype = `
     <p id="result" class="result"></p>
 `;
 
+export interface ColorScheme {
+  bg: string,
+  hover: string,
+  font: string,
+  fonttransparent: string,
+  yellow: string,
+  orange: string,
+  blue: string,
+  gray: string,
+  red: string,
+  green: string,
+  key: string
+}
+
 export class UI {
   constructor() {
     document.addEventListener("solve", () => {
@@ -31,9 +45,17 @@ export class UI {
     };
   }
 
-  setColor(color: string) {
+  setColor(color: ColorScheme) {
     var root = document.documentElement;
-    root.style.setProperty("--yellow", color);
+    root.style.setProperty("--bg", color.bg);
+    root.style.setProperty("--hover", color.hover);
+    root.style.setProperty("--yellow", color.yellow);
+    root.style.setProperty("--orange", color.orange);
+    root.style.setProperty("--blue", color.blue);
+    root.style.setProperty("--gray", color.gray);
+    root.style.setProperty("--red", color.red);
+    root.style.setProperty("--green", color.green);
+    root.style.setProperty("--key", color.key);
   }
 
   previewOutput(output: any) {
@@ -295,6 +317,30 @@ export const modals = {
                     <li style="white-space:nowrap; margin-bottom: 5px;">
                         <label for="color">Accent Color:</label>
                         <input class="conf" type="text" id="color" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="fcolor">Font Color:</label>
+                        <input class="conf" type="text" id="fcolor" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="bcolor">Background Color:</label>
+                        <input class="conf" type="text" id="bcolor" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="hcolor">Hover Color:</label>
+                        <input class="conf" type="text" id="hcolor" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="gcolor">Green:</label>
+                        <input class="conf" type="text" id="gcolor" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="rcolor">Red:</label>
+                        <input class="conf" type="text" id="rcolor" value="-">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="ocolor">Orange:</label>
+                        <input class="conf" type="text" id="ocolor" value="-">
                     </li>
                 </ul>
                 <h3>MathJS Options</h3>
