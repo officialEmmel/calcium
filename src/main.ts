@@ -1,7 +1,7 @@
 import { e } from "mathjs";
 import { Calculator } from "./calculator";
 import { Settings } from "./settings";
-import { UI, toggleK, modals } from "./ui";
+import { UI, toggleK, modals, ColorScheme } from "./ui";
 // import { Keyboard } from "./keyboard_new";
 
 //import {getConfig} from "./settings"
@@ -26,7 +26,19 @@ class App {
 
     // create settings
     this.settings = new Settings(this.calculator);
-    this.ui.setColor(this.settings.getConfig().general.accent_color);
+    let c = this.settings.getConfig();
+    console.log(c);
+    let scheme: ColorScheme = {
+      bg: c.colors.bg,
+      font: c.colors.font,
+      accent: c.colors.accent,
+      warn: c.colors.warn,
+      error: c.colors.error,
+      info: c.colors.info,
+      success: c.colors.success,
+    };
+
+    this.ui.setColor(scheme);
 
     //load history and set curr index
     this.history = this.getHistory();
@@ -238,8 +250,71 @@ class App {
   }
 
   settingsModal() {
-    let color = document.getElementById("color");
-    let bcolor =
+    let bg_color = document.getElementById("bg_color");
+    let font_color = document.getElementById("font_color");
+    let accent_color = document.getElementById("accent_color");
+    let warn_color = document.getElementById("warn_color");
+    let error_color = document.getElementById("error_color");
+    let info_color = document.getElementById("info_color");
+    let success_color = document.getElementById("success_color");
+
+    // @ts-ignore
+    bg_color.value = this.settings.getConfig().colors.bg;
+    // @ts-ignore
+    bg_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("bg", e.target.value);
+    });
+
+    // @ts-ignore
+    font_color.value = this.settings.getConfig().colors.font;
+    // @ts-ignore
+    font_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("font", e.target.value);
+    });
+
+    // @ts-ignore
+    accent_color.value = this.settings.getConfig().colors.accent;
+    // @ts-ignore
+    accent_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("accent", e.target.value);
+    });
+
+    // @ts-ignore
+    warn_color.value = this.settings.getConfig().colors.warn;
+    // @ts-ignore
+    warn_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("warn", e.target.value);
+    });
+
+    // @ts-ignore
+    error_color.value = this.settings.getConfig().colors.error;
+    // @ts-ignore
+    error_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("error", e.target.value);
+    });
+
+    // @ts-ignore
+    info_color.value = this.settings.getConfig().colors.info;
+    // @ts-ignore
+    info_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("info", e.target.value);
+    });
+
+    // @ts-ignore
+    success_color.value = this.settings.getConfig().colors.success;
+    // @ts-ignore
+    success_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("success", e.target.value);
+    });
+
+    
 
     let ep = document.getElementById("ep");
     let matrix = document.getElementById("matrix");
@@ -247,20 +322,13 @@ class App {
 
     let reset = document.getElementById("reset");
 
-    // @ts-ignore
-    color.value = this.settings.getConfig().general.accent_color;
+
     // @ts-ignore
     ep.value = this.settings.getConfig().math.epsilon;
     // @ts-ignore
     matrix.value = this.settings.getConfig().math.matrix;
     // @ts-ignore
     number.value = this.settings.getConfig().math.number;
-
-    color?.addEventListener("change", (e) => {
-      // @ts-ignore
-      this.settings.setGeneralConfig("accent_color", e.target.value);
-      window.location.reload();
-    });
 
     ep?.addEventListener("change", (e) => {
       // @ts-ignore

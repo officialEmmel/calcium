@@ -1,5 +1,6 @@
 import { MANIFEST } from "./manifest";
 import { Settings } from "./settings";
+import { color_list } from "./colors";
 let current = 0;
 let showedSolve = false;
 
@@ -11,16 +12,12 @@ let elementPrototype = `
 
 export interface ColorScheme {
   bg: string,
-  hover: string,
   font: string,
-  fonttransparent: string,
-  yellow: string,
-  orange: string,
-  blue: string,
-  gray: string,
-  red: string,
-  green: string,
-  key: string
+  accent: string,
+  warn: string,
+  error: string,
+  info: string,
+  success: string,
 }
 
 export class UI {
@@ -48,14 +45,33 @@ export class UI {
   setColor(color: ColorScheme) {
     var root = document.documentElement;
     root.style.setProperty("--bg", color.bg);
-    root.style.setProperty("--hover", color.hover);
-    root.style.setProperty("--yellow", color.yellow);
-    root.style.setProperty("--orange", color.orange);
-    root.style.setProperty("--blue", color.blue);
-    root.style.setProperty("--gray", color.gray);
-    root.style.setProperty("--red", color.red);
-    root.style.setProperty("--green", color.green);
-    root.style.setProperty("--key", color.key);
+    root.style.setProperty("--font", color.font);
+    root.style.setProperty("--yellow", color.accent);
+    root.style.setProperty("--orange", color.warn);
+    root.style.setProperty("--blue", color.info);
+    root.style.setProperty("--red", color.error);
+    root.style.setProperty("--green", color.success);
+
+    var hover = this.hexToRgb(color.bg);
+    hover[0] += 20;
+    hover[1] += 20;
+    hover[2] += 20;
+    root.style.setProperty("--hover", "rgb(" + hover[0] + "," + hover[1] + "," + hover[2] + ")");
+
+    var texttrans = this.hexToRgb(color.font);
+    root.style.setProperty("--text-transparent", "rgba(" + texttrans[0] + "," + texttrans[1] + "," + texttrans[2] + ",0.5)");
+  }
+
+  hexToRgb(hex: string) {
+    if(color_list[hex]) {
+      hex = color_list[hex];
+    }
+    var bigint = parseInt(hex.replace("#", ""), 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    
+    return [r, g, b];
   }
 
   previewOutput(output: any) {
@@ -312,37 +328,39 @@ export const modals = {
       html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Settings</h2>
-                <h3>General</h3>
+                <h3>Style Options</h3>
                 <ul>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="color">Accent Color:</label>
-                        <input class="conf" type="text" id="color" value="-">
+                        <div style="background-color: var(--bg); color: var(--font); padding: 10px; border-color: white; border-radius: 12px;">-</div>
+                        <label for="bg_color">Background Color:</label>
+                        <input class="conf" type="text" id="bg_color" value="">
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="fcolor">Font Color:</label>
-                        <input class="conf" type="text" id="fcolor" value="-">
+                        <label for="font_color">Text Color:</label>
+                        <input class="conf" type="text" id="font_color" value="">
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="bcolor">Background Color:</label>
-                        <input class="conf" type="text" id="bcolor" value="-">
+                        <label for="accent_color">Accent Color:</label>
+                        <input class="conf" type="text" id="accent_color" value="">
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="hcolor">Hover Color:</label>
-                        <input class="conf" type="text" id="hcolor" value="-">
+                        <label for="warn_color">Warn Color:</label>
+                        <input class="conf" type="text" id="warn_color" value="">
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="gcolor">Green:</label>
-                        <input class="conf" type="text" id="gcolor" value="-">
+                        <label for="error_color">Error Color:</label>
+                        <input class="conf" type="text" id="error_color" value="">
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="rcolor">Red:</label>
-                        <input class="conf" type="text" id="rcolor" value="-">
+                        <label for="info_color">Info Color:</label>
+                        <input class="conf" type="text" id="info_color" value="">
                     </li>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="ocolor">Orange:</label>
-                        <input class="conf" type="text" id="ocolor" value="-">
+                        <label for="success_color">Success Color:</label>
+                        <input class="conf" type="text" id="success_color" value="">
                     </li>
-                </ul>
+                </ul>   
+                <h4>You can use hex color codes or use <a href="https://www.w3.org/wiki/CSS/Properties/color/keywords">these</a> presets.</h4>
                 <h3>MathJS Options</h3>
                 <ul>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
@@ -384,7 +402,7 @@ export const modals = {
   about: {
     html: `
             <div class="padding: 0; margin: 0; ">
-                <h2 style="text-align: center;">${MANIFEST.name}</h2>
+                <h2 style="text-align: center; color: var(--yellow)">${MANIFEST.name}</h2>
                 <h4 style="text-align: center;">A leightweight calculator with focus on productivity and minimalism.</h4>
                 <h4 style="text-align: center;">v${MANIFEST.version} | <a href="https://github.com/officialEmmel/calcium">Source code</a></h4>
                 <h4 style="text-align: center;">Made with ❤️ by emmel</h4>
