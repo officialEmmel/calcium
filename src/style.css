@@ -429,3 +429,48 @@ html,
   cursor: pointer;
   width: 100%;
 }
+
+.collapsible {
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 12px;
+  outline: none;
+  color: var(--font);
+  border-radius: 12px;
+  background-color: var(--hover);
+}
+
+.active,
+.collapsible:hover {}
+
+.collapsible:after {
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+  border-radius: 12%;
+}
+
+.bottom-radius-off {
+  border-bottom-left-radius: 0%;
+  border-bottom-right-radius: 0%;
+}
+
+.active:after {
+  border-top-left-radius: 0%;
+  border-top-right-radius: 0%;
+}
+
+.content {
+  color: var(--font);
+  border-radius: 12px;
+  border-top-right-radius: 0%;
+  border-top-left-radius: 0%;
+  background-color: var(--hover);
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
