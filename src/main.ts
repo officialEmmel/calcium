@@ -378,6 +378,7 @@ class App {
       coll[i].addEventListener("click", function () {
         // @ts-ignore
         this.classList.toggle("active");
+        // @ts-ignore
         var content = this.nextElementSibling;
         if (content.style.maxHeight) {
           setTimeout(() => {
