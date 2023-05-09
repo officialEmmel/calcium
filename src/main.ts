@@ -54,6 +54,8 @@ class App {
     this.setEventListeners();
 
     this.ui.showToast("This calculator is still in development.", "orange");
+    
+    // @ts-ignore
     if (window.location.href.includes("settings")) {
       this.ui.showModal(modals.settings(this.settings));
       this.settingsModal();
@@ -257,6 +259,7 @@ class App {
     if (window.location.href.includes("settings")) {
       if (window.location.href.includes("styles")) {
         setTimeout(() => {
+          // @ts-ignore
           document.getElementById("settings-styles").click();
         }, 100);
       }
