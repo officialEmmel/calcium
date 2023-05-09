@@ -421,8 +421,8 @@ export const modals = {
     html: `
             <div class="padding: 0; margin: 0; ">
                 <h2 style="text-align: center; color: var(--yellow)">${MANIFEST.name}</h2>
-                <h4 style="text-align: center;">A leightweight calculator with focus on productivity and minimalism.</h4>
-                <h4 style="text-align: center;">v${MANIFEST.version} | <a href="https://github.com/officialEmmel/calcium">Source code</a></h4>
+                <h4 style="text-align: center;">A lightweight calculator with focus on productivity and minimalism.</h4>
+                <h4 style="text-align: center;">v${MANIFEST.version} | <a href="https://github.com/officialEmmel/calcium">code on Github</a></h4>
                 <h4 style="text-align: center;">Made with ❤️ by emmel</h4>
             </div>  
         `,
