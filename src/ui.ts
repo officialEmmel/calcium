@@ -1,5 +1,6 @@
 import { MANIFEST } from "./manifest";
 import { Settings } from "./settings";
+import { color_list } from "./colors";
 let current = 0;
 let showedSolve = false;
 
@@ -8,6 +9,16 @@ let elementPrototype = `
     <input type="text" id="input" class="input" placeholder="Type here...">
     <p id="result" class="result"></p>
 `;
+
+export interface ColorScheme {
+  bg: string;
+  font: string;
+  accent: string;
+  warn: string;
+  error: string;
+  info: string;
+  success: string;
+}
 
 export class UI {
   constructor() {
@@ -23,6 +34,7 @@ export class UI {
       if (event.target == modal) {
         modal.classList.remove("show");
         modal.classList.add("hide");
+        window.location.href = "#";
         setTimeout(() => {
           modal.style.display = "none";
           modal.classList.remove("hide");
@@ -31,9 +43,42 @@ export class UI {
     };
   }
 
-  setColor(color: string) {
+  setColor(color: ColorScheme) {
     var root = document.documentElement;
-    root.style.setProperty("--yellow", color);
+    root.style.setProperty("--bg", color.bg);
+    root.style.setProperty("--font", color.font);
+    root.style.setProperty("--yellow", color.accent);
+    root.style.setProperty("--orange", color.warn);
+    root.style.setProperty("--blue", color.info);
+    root.style.setProperty("--red", color.error);
+    root.style.setProperty("--green", color.success);
+
+    var hover = this.hexToRgb(color.bg);
+    hover[0] += 20;
+    hover[1] += 20;
+    hover[2] += 20;
+    root.style.setProperty(
+      "--hover",
+      "rgb(" + hover[0] + "," + hover[1] + "," + hover[2] + ")"
+    );
+
+    var texttrans = this.hexToRgb(color.font);
+    root.style.setProperty(
+      "--text-transparent",
+      "rgba(" + texttrans[0] + "," + texttrans[1] + "," + texttrans[2] + ",0.5)"
+    );
+  }
+
+  hexToRgb(hex: string) {
+    if (color_list[hex]) {
+      hex = color_list[hex];
+    }
+    var bigint = parseInt(hex.replace("#", ""), 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+
+    return [r, g, b];
   }
 
   previewOutput(output: any) {
@@ -198,6 +243,7 @@ export class UI {
     span.onclick = function () {
       modal.classList.remove("show");
       modal.classList.add("hide");
+      window.location.href = "#";
       setTimeout(() => {
         modal.style.display = "none";
         modal.classList.remove("hide");
@@ -290,14 +336,45 @@ export const modals = {
       html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Settings</h2>
-                <h3>General</h3>
-                <ul>
-                    <li style="white-space:nowrap; margin-bottom: 5px;">
-                        <label for="color">Accent Color:</label>
-                        <input class="conf" type="text" id="color" value="-">
-                    </li>
-                </ul>
-                <h3>MathJS Options</h3>
+                <button id="settings-styles" class="collapsible"><h3>Style Options</h3></button>
+                <div class="content">
+                  <ul>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <p>Example:</p>
+                            <div style="background-color: var(--bg); color: var(--font); padding: 10px; border-color: white; margin-bottom:12px;border-radius: 12px;">57+12</div>
+                            <label for="bg_color">Background Color:</label>
+                            <input class="conf" type="text" id="bg_color" value="">
+                        </li>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <label for="font_color">Text Color:</label>
+                            <input class="conf" type="text" id="font_color" value="">
+                        </li>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <label for="accent_color">Accent Color:</label>
+                            <input class="conf" type="text" id="accent_color" value="">
+                        </li>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <label for="warn_color">Warn Color:</label>
+                            <input class="conf" type="text" id="warn_color" value="">
+                        </li>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <label for="error_color">Error Color:</label>
+                            <input class="conf" type="text" id="error_color" value="">
+                        </li>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <label for="info_color">Info Color:</label>
+                            <input class="conf" type="text" id="info_color" value="">
+                        </li>
+                        <li style="white-space:nowrap; margin-bottom: 5px;">
+                            <label for="success_color">Success Color:</label>
+                            <input class="conf" type="text" id="success_color" value="">
+                        </li>
+                  </ul> 
+                  <h4>You can use hex color codes or use <a href="https://www.w3.org/wiki/CSS/Properties/color/keywords">these</a> presets.</h4>  
+                </div>
+                &nbsp;
+                <button id="settings-mathjs" class="collapsible"><h3>MathJS Options</h3></button>
+                <div class="content">
                 <ul>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
                         <label for="ep">Epsilon:</label>
@@ -320,7 +397,10 @@ export const modals = {
                     </li>
                 </ul>
                 <h4>Wonder what each option does? Take a look at <a href="https://mathjs.org/docs/core/configuration.html">MathJS Documentation.</a></h4>
-                <h3>Advanced Options</h3>
+                </div>
+                &nbsp;
+                <button id="settings-advanced" class="collapsible"><h3>Advanced Options</h3></button>
+                <div class="content">
                 <ul>
                     <li style="white-space:nowrap; margin-bottom: 5px;">
                         <label for="cjs">Custom JavaScript Snippet:</label>
@@ -331,6 +411,8 @@ export const modals = {
                         <input class="conf" type="text" id="ccss" value="-">
                     </li>
                 </ul>
+                </div>
+                &nbsp;
                 <button class="btn" id="reset">Reset to default</button>
                 `,
     };
@@ -338,7 +420,7 @@ export const modals = {
   about: {
     html: `
             <div class="padding: 0; margin: 0; ">
-                <h2 style="text-align: center;">${MANIFEST.name}</h2>
+                <h2 style="text-align: center; color: var(--yellow)">${MANIFEST.name}</h2>
                 <h4 style="text-align: center;">A leightweight calculator with focus on productivity and minimalism.</h4>
                 <h4 style="text-align: center;">v${MANIFEST.version} | <a href="https://github.com/officialEmmel/calcium">Source code</a></h4>
                 <h4 style="text-align: center;">Made with ❤️ by emmel</h4>

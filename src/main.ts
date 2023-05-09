@@ -1,7 +1,7 @@
 import { e } from "mathjs";
 import { Calculator } from "./calculator";
 import { Settings } from "./settings";
-import { UI, toggleK, modals } from "./ui";
+import { UI, toggleK, modals, ColorScheme } from "./ui";
 // import { Keyboard } from "./keyboard_new";
 
 //import {getConfig} from "./settings"
@@ -26,7 +26,19 @@ class App {
 
     // create settings
     this.settings = new Settings(this.calculator);
-    this.ui.setColor(this.settings.getConfig().general.accent_color);
+    let c = this.settings.getConfig();
+    console.log(c);
+    let scheme: ColorScheme = {
+      bg: c.colors.bg,
+      font: c.colors.font,
+      accent: c.colors.accent,
+      warn: c.colors.warn,
+      error: c.colors.error,
+      info: c.colors.info,
+      success: c.colors.success,
+    };
+
+    this.ui.setColor(scheme);
 
     //load history and set curr index
     this.history = this.getHistory();
@@ -42,6 +54,12 @@ class App {
     this.setEventListeners();
 
     this.ui.showToast("This calculator is still in development.", "orange");
+    
+    // @ts-ignore
+    if (window.location.href.includes("settings")) {
+      this.ui.showModal(modals.settings(this.settings));
+      this.settingsModal();
+    }
   }
 
   //#region EventListeners
@@ -238,7 +256,86 @@ class App {
   }
 
   settingsModal() {
-    let color = document.getElementById("color");
+    if (window.location.href.includes("settings")) {
+      if (window.location.href.includes("styles")) {
+        setTimeout(() => {
+          // @ts-ignore
+          document.getElementById("settings-styles").click();
+        }, 100);
+      }
+    } else {
+      window.location.href = "#settings";
+    }
+    let bg_color = document.getElementById("bg_color");
+    let font_color = document.getElementById("font_color");
+    let accent_color = document.getElementById("accent_color");
+    let warn_color = document.getElementById("warn_color");
+    let error_color = document.getElementById("error_color");
+    let info_color = document.getElementById("info_color");
+    let success_color = document.getElementById("success_color");
+
+    // @ts-ignore
+    bg_color.value = this.settings.getConfig().colors.bg;
+    // @ts-ignore
+    bg_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("bg", e.target.value);
+      window.location.reload();
+    });
+
+    // @ts-ignore
+    font_color.value = this.settings.getConfig().colors.font;
+    // @ts-ignore
+    font_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("font", e.target.value);
+      window.location.reload();
+    });
+
+    // @ts-ignore
+    accent_color.value = this.settings.getConfig().colors.accent;
+    // @ts-ignore
+    accent_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("accent", e.target.value);
+      window.location.reload();
+    });
+
+    // @ts-ignore
+    warn_color.value = this.settings.getConfig().colors.warn;
+    // @ts-ignore
+    warn_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("warn", e.target.value);
+      window.location.reload();
+    });
+
+    // @ts-ignore
+    error_color.value = this.settings.getConfig().colors.error;
+    // @ts-ignore
+    error_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("error", e.target.value);
+      window.location.reload();
+    });
+
+    // @ts-ignore
+    info_color.value = this.settings.getConfig().colors.info;
+    // @ts-ignore
+    info_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("info", e.target.value);
+      window.location.reload();
+    });
+
+    // @ts-ignore
+    success_color.value = this.settings.getConfig().colors.success;
+    // @ts-ignore
+    success_color?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setColorConfig("success", e.target.value);
+      window.location.reload();
+    });
 
     let ep = document.getElementById("ep");
     let matrix = document.getElementById("matrix");
@@ -247,19 +344,11 @@ class App {
     let reset = document.getElementById("reset");
 
     // @ts-ignore
-    color.value = this.settings.getConfig().general.accent_color;
-    // @ts-ignore
     ep.value = this.settings.getConfig().math.epsilon;
     // @ts-ignore
     matrix.value = this.settings.getConfig().math.matrix;
     // @ts-ignore
     number.value = this.settings.getConfig().math.number;
-
-    color?.addEventListener("change", (e) => {
-      // @ts-ignore
-      this.settings.setGeneralConfig("accent_color", e.target.value);
-      window.location.reload();
-    });
 
     ep?.addEventListener("change", (e) => {
       // @ts-ignore
@@ -280,6 +369,32 @@ class App {
       this.settings.reset();
       window.location.reload();
     });
+    
+    // @ts-ignore
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function () {
+        // @ts-ignore
+        this.classList.toggle("active");
+        // @ts-ignore
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight) {
+          setTimeout(() => {
+            // @ts-ignore
+            this.classList.toggle("bottom-radius-off");
+            window.location.href = "#settings";
+          }, 200);
+          content.style.maxHeight = null;
+        } else {
+          // @ts-ignore
+          this.classList.toggle("bottom-radius-off");
+          window.location.href = "#settings/styles";
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      });
+    }
   }
 
   parse(exp: any, prev: any) {

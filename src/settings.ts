@@ -7,8 +7,15 @@ export class Settings {
   defaultConfig = {
     general: {
       language: "en",
-      theme: "dark",
-      accent_color: "#ffc814",
+    },
+    colors: {
+      bg: "#121212",
+      font: "#ffffff",
+      accent: "#ffc814",
+      warn: "#ff7214",
+      error: "#fc4848",
+      info: "#0982fc",
+      success: "#349234",
     },
     math: {
       epsilon: 1e-12,
@@ -60,6 +67,14 @@ export class Settings {
     console.log("set general config", key, value);
     let config = this.getConfig();
     config.general[key] = value;
+    this.setKey("config", JSON.stringify(config));
+    this.calculator.setConfig(config.math);
+  }
+
+  setColorConfig(key: string, value: string) {
+    console.log("set colors config", key, value);
+    let config = this.getConfig();
+    config.colors[key] = value;
     this.setKey("config", JSON.stringify(config));
     this.calculator.setConfig(config.math);
   }
