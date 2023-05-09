@@ -369,21 +369,25 @@ class App {
       this.settings.reset();
       window.location.reload();
     });
-
+    
+    // @ts-ignore
     var coll = document.getElementsByClassName("collapsible");
     var i;
 
     for (i = 0; i < coll.length; i++) {
       coll[i].addEventListener("click", function () {
+        // @ts-ignore
         this.classList.toggle("active");
         var content = this.nextElementSibling;
         if (content.style.maxHeight) {
           setTimeout(() => {
+            // @ts-ignore
             this.classList.toggle("bottom-radius-off");
             window.location.href = "#settings";
           }, 200);
           content.style.maxHeight = null;
         } else {
+          // @ts-ignore
           this.classList.toggle("bottom-radius-off");
           window.location.href = "#settings/styles";
           content.style.maxHeight = content.scrollHeight + "px";
