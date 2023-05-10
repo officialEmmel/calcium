@@ -1,4 +1,4 @@
-![](/images/icons/icon-512x512.png)
+![](/images/512x512-icon.png)
 # CALCIUM
 
 Minimalistic and text-based calculator written in vanilla ts and html with vite.js 
