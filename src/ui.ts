@@ -92,6 +92,17 @@ export class UI {
     preview.scrollIntoView();
   }
 
+  previewSuggestion(suggestion: any) {
+    var preview: any = document.querySelector("#latest > #input");
+    let all = preview.value.length;
+    let last = preview.value.split(" ")[preview.value.split(" ").length - 1];
+    let lastlen = last.length;
+    let previewlen = suggestion.length;
+
+    suggestion = suggestion.substring(lastlen, suggestion.length);
+    this.previewOutput(preview.value + suggestion);
+  }
+
   previewError(output: any) {
     var preview: any = document.querySelector("#latest > #result");
     preview.style.color = "var(--red)";

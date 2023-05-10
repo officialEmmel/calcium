@@ -2,6 +2,7 @@ import { e } from "mathjs";
 import { Calculator } from "./calculator";
 import { Settings } from "./settings";
 import { UI, toggleK, modals, ColorScheme } from "./ui";
+import { suggestions } from "./suggestions";
 // import { Keyboard } from "./keyboard_new";
 
 //import {getConfig} from "./settings"
@@ -130,7 +131,12 @@ class App {
   //#region I/O
   setOut() {
     var input: any = document.querySelector("#latest > #input");
-    var e = this.parse(input.value, false);
+    try {
+      var e = this.parse(input.value, false);
+    } catch (err: any) {
+      this.ui.previewError(err.message);
+      return;
+    }
 
     if (e == "clear history") {
       this.removeEventListeners(input);
@@ -195,7 +201,8 @@ class App {
   //#endregion
 
   keypress(event: any) {
-    this.inputAutoComplete(event);
+    this.bracketLogic(event);
+    this.autoCompletion(event);
     if (event.key === "Enter") {
       //event.preventDefault();
       this.setOut();
@@ -210,7 +217,16 @@ class App {
     }
   }
 
-  inputAutoComplete(event: any) {
+  autoCompletion(event: any) {
+    let input: any = document.querySelector("#latest > #input");
+    for (let i = 0; i < suggestions.length; i++) {
+      if (suggestions[i].startsWith(input.value + event.key)) {
+        this.ui.previewSuggestion(suggestions[i]);
+      }
+    }
+  }
+
+  bracketLogic(event: any) {
     let input: any = document.querySelector("#latest > #input");
     if (event.key == "(") {
       if (input.selectionStart != input.selectionEnd) {

@@ -56,6 +56,18 @@ input {
   padding: 0;
 }
 
+.sugg {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: var(--bg);
+  color: var(--yellow);
+  border-width: 0px;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  width: 100%;
+  padding: 0;
+}
+
 .listItem {
   padding: 12px;
   line-break: auto;
