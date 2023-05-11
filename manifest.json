@@ -1,8 +1,8 @@
 {
   "name": "CALCIUM",
   "short_name": "",
-  "theme_color": "#0000",
-  "background_color": "#0000",
+  "theme_color": "#121212",
+  "background_color": "#121212",
   "display": "fullScreen",
   "orientation": "portrait",
   "scope": "/",

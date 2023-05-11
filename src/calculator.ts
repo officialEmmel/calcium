@@ -4,9 +4,11 @@ import { create, all } from "mathjs";
 export class Calculator {
   math: any;
   parser: any;
+  round_precision: any;
   constructor() {
     this.math = create(all);
     this.parser = this.createParser();
+    this.round_precision = -1;
   }
 
   private createParser() {
@@ -28,6 +30,10 @@ export class Calculator {
     this.math.config(cfg);
   }
 
+  setRoundPrecision(p: number) {
+    this.round_precision = p;
+  }
+
   calculate(exp: string, prev: boolean) {
     // Replace stuff
     exp = exp.replaceAll("π", "pi");
@@ -47,6 +53,7 @@ export class Calculator {
         prevParser.set(key, vars[key]);
       }
       res = prevParser.evaluate(exp);
+      
     } else {
       res = this.parser.evaluate(exp);
       try {
@@ -57,6 +64,15 @@ export class Calculator {
       try {
         //nerdamer.evaluate(exp);
       } catch (e) {}
+    }
+    if (this.round_precision != -1) {
+      console.log("rounding", this.round_precision);
+      try {
+        res = this.math.round(res, parseInt(this.round_precision,10)).toString();
+      }
+      catch(e){
+        console.log("cant round");
+      }
     }
 
     if (res == "69") {

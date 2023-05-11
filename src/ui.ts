@@ -292,6 +292,7 @@ export const modals = {
                 <div class="step">
                   <ul>
                       <li><code>!help</code> Shows help</li>
+                      <li><code>!settings</code> Configure Calcium</li>
                       <li><code>!clear</code> Clears history and all variables</li>
                       <li><code>!about</code> Shows about screen</li>
                   </ul>  
@@ -336,22 +337,33 @@ export const modals = {
       html: `
             <div class="padding: 0; margin: 0; ">
                 <h2>Settings</h2>
+                <button id="settings-gen" class="collapsible"><h3>Genral Options</h3></button>
+                <div class="content">
+                <ul>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="round">Round result: </label>
+                        <p style="font-size:12px; ">"-1" for default mathJS behavior</p>
+                        <input class="conf" type="text" id="round" value="">
+                    </li>
+                    <li style="white-space:nowrap; margin-bottom: 5px;">
+                        <label for="brackets">Auto-complete brackets:</label>
+                        <input class="conf" type="checkbox" id="brackets" >
+                    </li>
+                </ul>
+                </div>
+                &nbsp;
                 <button id="settings-styles" class="collapsible"><h3>Style Options</h3></button>
                 <div class="content">
                   <ul>
                         <li style="white-space:nowrap; margin-bottom: 5px;">
-                            <p>Example:</p>
-                            <div style="background-color: var(--bg); color: var(--font); padding: 10px; border-color: white; margin-bottom:12px;border-radius: 12px;">57+12</div>
-                            <label for="bg_color">Background Color:</label>
-                            <input class="conf" type="text" id="bg_color" value="">
-                        </li>
-                        <li style="white-space:nowrap; margin-bottom: 5px;">
                             <label for="font_color">Text Color:</label>
                             <input class="conf" type="text" id="font_color" value="">
+
                         </li>
                         <li style="white-space:nowrap; margin-bottom: 5px;">
                             <label for="accent_color">Accent Color:</label>
                             <input class="conf" type="text" id="accent_color" value="">
+                            
                         </li>
                         <li style="white-space:nowrap; margin-bottom: 5px;">
                             <label for="warn_color">Warn Color:</label>
@@ -412,7 +424,6 @@ export const modals = {
                     </li>
                 </ul>
                 </div>
-                &nbsp;
                 <button class="btn" id="reset">Reset to default</button>
                 `,
     };
@@ -455,6 +466,16 @@ export const modals = {
             `,
     };
   },
+  graphing:{
+    html: `
+    <div id="ggb-element"></div> 
+    
+    <script>  
+    var params = {"appName": "graphing", "width": 800, "height": 600, "showToolBar": true, "showAlgebraInput": true, "showMenuBar": true };
+    var applet = new GGBApplet(params, true);
+    applet.inject('ggb-element');
+    </script>`
+  }
 };
 
 function showKeyboard() {

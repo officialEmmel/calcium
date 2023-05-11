@@ -25,9 +25,8 @@ class App {
     this.calculator = new Calculator();
 
     // create settings
-    this.settings = new Settings(this.calculator);
+    this.settings = new Settings(this.calculator, this.ui);
     let c = this.settings.getConfig();
-    console.log(c);
     let scheme: ColorScheme = {
       bg: c.colors.bg,
       font: c.colors.font,
@@ -253,6 +252,14 @@ class App {
         }
       }
     }
+
+    if (event.key == "*" || event.key == "/" || event.key == "^" || event.key == "+" ) {
+      if (input.value.length == 0) {
+        event.preventDefault();
+        input.value = "ans " + event.key + " ";
+        input.selectionStart = 6;
+      }
+    }
   }
 
   settingsModal() {
@@ -266,6 +273,28 @@ class App {
     } else {
       window.location.href = "#settings";
     }
+
+    let round = document.getElementById("round");
+    let brackets = document.getElementById("brackets");
+
+    // @ts-ignore
+    round.value = this.settings.getConfig().general.round_precision;
+    // @ts-ignore
+    round?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setGeneralConfig("round_precision", e.target.value);
+      //window.location.reload()
+    });
+
+    // @ts-ignore
+    brackets.checked = this.settings.getConfig().general.brackets;
+    // @ts-ignore
+    brackets?.addEventListener("change", (e) => {
+      // @ts-ignore
+      this.settings.setGeneralConfig("bracket_completion", e.target.checked);
+    
+    });
+
     let bg_color = document.getElementById("bg_color");
     let font_color = document.getElementById("font_color");
     let accent_color = document.getElementById("accent_color");
@@ -376,7 +405,7 @@ class App {
 
     for (i = 0; i < coll.length; i++) {
       coll[i].addEventListener("click", function () {
-        // @ts-ignore
+        // @ts-ignore ik bad style but it works
         this.classList.toggle("active");
         // @ts-ignore
         var content = this.nextElementSibling;
@@ -390,7 +419,6 @@ class App {
         } else {
           // @ts-ignore
           this.classList.toggle("bottom-radius-off");
-          window.location.href = "#settings/styles";
           content.style.maxHeight = content.scrollHeight + "px";
         }
       });
@@ -409,6 +437,10 @@ class App {
       "s",
       "a",
       "k",
+      "geogebra",
+      "ggb",
+      "g",
+      "graphing",
     ];
     if (exp[0] == "!") {
       if (new RegExp("^! *(" + commands.join("|") + ")$").test(exp)) {
@@ -492,6 +524,15 @@ class App {
               return "keyboard not available in deploy-mode";
             }
             return "toggles keyboard";
+          case "geogebra":
+          case "ggb":
+          case "g":
+          case "graphing":
+            if (!prev) {
+              this.ui.showModal(modals.graphing);
+            } else {
+              return "press enter for graphing";
+            }
         }
       } else {
         return "unknown command. you can see all commands: <b>!help</b>";
